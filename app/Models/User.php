@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\Cart;
+use App\Models\Product;
+use App\Models\Review;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -69,5 +72,19 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    // Users's wishlist
+    public function products(){
+        return $this->belongsToMany(Product::class);
+    }
+
+
+    public function cart(){
+        return $this->belongsTo(Cart::class);
+    }
+
+    public function reviews(){
+        return $this->hasMany(Review::class);
     }
 }
