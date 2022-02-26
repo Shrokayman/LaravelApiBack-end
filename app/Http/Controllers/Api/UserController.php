@@ -70,4 +70,31 @@ class UserController extends Controller
         return response()->json($response);
     }
 
+
+    public function update(Request $request,$id){
+        $user = User::find($id);
+        if($user){
+            $user->update($request->all());
+
+            $response['status'] = 1;
+            $response['message'] = 'Data updated successfully';
+            $response['code'] = 200;
+        }
+        else{
+            $response['status'] = 0;
+            $response['message'] = 'User not found';
+            $response['code'] = 404;
+        }
+
+        return response()->json($response);
+    }
+
+    public function show($id){
+        $user = User::find($id);
+        if(is_null($user)){
+            return response()->json(['message' => "User does not exist"] , 404);
+        }
+        return response()->json($user);
+    }
+
 }
