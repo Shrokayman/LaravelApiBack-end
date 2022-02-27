@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\StoreBrandRequest;
-use App\Http\Requests\UpdateBrandRequest;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Brand;
 
 class BrandController extends Controller
@@ -15,7 +15,8 @@ class BrandController extends Controller
      */
     public function index()
     {
-        //
+        $brands=Brand::all();
+        return $brands;
     }
 
     /**
@@ -31,21 +32,23 @@ class BrandController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreBrandRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreBrandRequest $request)
+    public function store(Request $request)
     {
-        //
+            $brand= new Brand;
+            $brand->name=$request->name;
+            $brand->save();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Brand  $brand
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Brand $brand)
+    public function show($id)
     {
         //
     }
@@ -53,10 +56,10 @@ class BrandController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Brand  $brand
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Brand $brand)
+    public function edit($id)
     {
         //
     }
@@ -64,11 +67,11 @@ class BrandController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateBrandRequest  $request
-     * @param  \App\Models\Brand  $brand
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateBrandRequest $request, Brand $brand)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -76,11 +79,11 @@ class BrandController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Brand  $brand
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Brand $brand)
+    public function destroy($id)
     {
-        //
+        return Brand::destroy($id);
     }
 }
