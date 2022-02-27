@@ -70,12 +70,26 @@ class UserController extends Controller
         return response()->json($response);
     }
 
+    public function index()
+    {
+        //Select* From Users
+        return User::all();
+         
+    }
 
     public function update(Request $request,$id){
         $user = User::find($id);
         if($user){
-            $user->update($request->all());
-
+            // $user->update($request->all());
+            $user->fname=$request->fname;
+            $user->lname=$request->lname;
+            $user->email=$request->email;
+            $user->password=$request->password;
+            $user->city=$request->city;
+            $user->street=$request->street;
+            $user->phone=$request->phone;
+            $user->role=$request->role;
+            $user->save();
             $response['status'] = 1;
             $response['message'] = 'Data updated successfully';
             $response['code'] = 200;
@@ -96,5 +110,12 @@ class UserController extends Controller
         }
         return response()->json($user);
     }
+
+
+
+   public function destroy($id){
+    User::destroy($id);
+    return "User Deleted Succesfully";
+}
 
 }
