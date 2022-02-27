@@ -75,6 +75,10 @@ class UserController extends Controller
         $user = User::find($id);
         if($user){
             $user->update($request->all());
+            if($request->password){
+                $user->password = bcrypt($request->password);
+                $user->save();
+            }
 
             $response['status'] = 1;
             $response['message'] = 'Data updated successfully';
