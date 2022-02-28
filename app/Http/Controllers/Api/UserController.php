@@ -73,7 +73,6 @@ class UserController extends Controller
     }
 
 
-    // update user data by id
     public function update(Request $request,$id){
         try{
             $user = auth()->userOrFail();
@@ -101,7 +100,6 @@ class UserController extends Controller
         return response()->json($response);
     }
 
-    // get user data by id
     public function show($id){
         try{
             $user = auth()->userOrFail();
@@ -115,12 +113,11 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    // generate new token after expiry of the old token
     public function refresh(){
         try{
             $newToken = auth()->refresh();
         }catch(TokenInvalidException $e){
-            return response()->json(['error' => $e->getMessage()] , 401);
+            return response()->json(['error' => $e->getMessage()] ,401);
         }
 
         return response()->json(['token' => $newToken]);
