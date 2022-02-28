@@ -87,16 +87,7 @@ class UserController extends Controller
     public function update(Request $request,$id){
         $user = User::find($id);
         if($user){
-            // $user->update($request->all());
-            $user->fname=$request->fname;
-            $user->lname=$request->lname;
-            $user->email=$request->email;
-            $user->password=$request->password;
-            $user->city=$request->city;
-            $user->street=$request->street;
-            $user->phone=$request->phone;
-            $user->role=$request->role;
-            $user->save();
+             $user->update($request->all());
             $response['status'] = 1;
             $response['message'] = 'Data updated successfully';
             $response['code'] = 200;
