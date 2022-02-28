@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTExceptions;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\UserNotDefinedException;
 
 class UserController extends Controller
 {
@@ -70,11 +71,17 @@ class UserController extends Controller
         return response()->json($response);
     }
 
-    public function index()
-    {
+    public function index(){
+    try{
+        $user = auth()->userOrFail();
+    }catch(UserNotDefinedException $e){
+        return response()->json(['error' => $e->getMessage()]);
+    }
+    
         //Select* From Users
-        return User::all();
-         
+        $user= User::all();
+        return $user;
+        
     }
 
     public function update(Request $request,$id){
@@ -114,8 +121,13 @@ class UserController extends Controller
 
 
    public function destroy($id){
-    User::destroy($id);
-    return "User Deleted Succesfully";
+    try{
+        $user = auth()->userOrFail();
+    }catch(UserNotDefinedException $e){
+        return response()->json(['error' => $e->getMessage()]);
+    }
+    $user = User::destroy($id);
+    return $user;
 }
 
 }
