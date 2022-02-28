@@ -79,26 +79,46 @@ class UserController extends Controller
         }catch(UserNotDefinedException $e){
             return response()->json(['error' => $e->getMessage()]);
         }
-        $user = User::find($id);
-        if($user){
-            $user->update($request->all());
-            if($request->password){
-                $user->password = bcrypt($request->password);
-                $user->save();
-            }
+        if($user->role =="admin"){
+            $user = User::find($id);
+            if($user){
+                $user->update($request->all());
+                if($request->password){
+                    $user->password = bcrypt($request->password);
+                    $user->save();
+                }
 
-            $response['status'] = 1;
-            $response['message'] = 'Data updated successfully';
-            $response['code'] = 200;
+                $response['status'] = 1;
+                $response['message'] = 'Data updated successfully';
+                $response['code'] = 200;
+            }
+            else{
+                $response['status'] = 0;
+                $response['message'] = 'User not found';
+                $response['code'] = 404;
+            }
         }
         else{
-            $response['status'] = 0;
-            $response['message'] = 'User not found';
-            $response['code'] = 404;
+            $user = User::find($user->id);
+            if($user){
+                $user->update($request->all());
+                if($request->password){
+                    $user->password = bcrypt($request->password);
+                    $user->save();
+                }
+                $response['status'] = 1;
+                $response['message'] = 'Your Data updated successfully';
+                $response['code'] = 200;
+            }
+            else{
+                $response['status'] = 0;
+                $response['message'] = 'User not found';
+                $response['code'] = 404;
+            }
         }
-
         return response()->json($response);
     }
+
 
     public function show($id){
         try{
@@ -106,10 +126,16 @@ class UserController extends Controller
         }catch(UserNotDefinedException $e){
             return response()->json(['error' => $e->getMessage()]);
         }
-        $user = User::find($id);
-        if(is_null($user)){
-            return response()->json(['message' => "User does not exist"] , 404);
+        if($user->role == "admin"){
+            $user = User::find($id);
+            if(is_null($user)){
+                return response()->json(['message' => "User does not exist"] , 404);
+            }
         }
+        else{
+            $user = User::find($user->id);
+        }
+
         return response()->json($user);
     }
 
