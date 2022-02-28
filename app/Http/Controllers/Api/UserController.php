@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTExceptions;
+use Tymon\JWTAuth\Exceptions\UserNotDefinedException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class UserController extends Controller
 {
@@ -71,7 +73,13 @@ class UserController extends Controller
     }
 
 
+    // update user data by id
     public function update(Request $request,$id){
+        try{
+            $user = auth()->userOrFail();
+        }catch(UserNotDefinedException $e){
+            return response()->json(['error' => $e->getMessage()]);
+        }
         $user = User::find($id);
         if($user){
             $user->update($request->all());
@@ -93,12 +101,29 @@ class UserController extends Controller
         return response()->json($response);
     }
 
+    // get user data by id
     public function show($id){
+        try{
+            $user = auth()->userOrFail();
+        }catch(UserNotDefinedException $e){
+            return response()->json(['error' => $e->getMessage()]);
+        }
         $user = User::find($id);
         if(is_null($user)){
             return response()->json(['message' => "User does not exist"] , 404);
         }
         return response()->json($user);
+    }
+
+    // generate new token after expiry of the old token
+    public function refresh(){
+        try{
+            $newToken = auth()->refresh();
+        }catch(TokenInvalidException $e){
+            return response()->json(['error' => $e->getMessage()] , 401);
+        }
+
+        return response()->json(['token' => $newToken]);
     }
 
 }

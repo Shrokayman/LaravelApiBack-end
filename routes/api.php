@@ -23,9 +23,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('register' , [UserController::class , 'register']);
 Route::post('login' , [UserController::class , 'login']);
 
-// Update user's data
+// Update user's data (Protected route : requires token)
 Route::put('users/{id}' ,[UserController::class , "update"]);
 
-// Show user by id
+// Show user by id (Protected route : requires token)
 Route::get('users/{id}' , [UserController::class , "show"]);
 
+// To get a new token after expiry of the token (Protected route : requires old token to renew it)
+Route::get('refresh' ,[UserController::class , "refresh"] );
+//
