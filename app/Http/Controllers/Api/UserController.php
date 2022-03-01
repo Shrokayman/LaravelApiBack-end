@@ -85,47 +85,22 @@ class UserController extends Controller
     }
 
     public function update(Request $request,$id){
-        // try{
-        //     $user = auth()->userOrFail();
-        // }catch(UserNotDefinedException $e){
-        //     return response()->json(['error' => $e->getMessage()]);
-        // }
-        // if($user->role =="admin"){
-        //     $user = User::find($id);
-        //     if($user){
-        //         $user->update($request->all());
-        //         if($request->password){
-        //             $user->password = bcrypt($request->password);
-        //             $user->save();
-        //         }
-
-        //         $response['status'] = 1;
-        //         $response['message'] = 'Data updated successfully';
-        //         $response['code'] = 200;
-        //     }
-        //     else{
-        //         $response['status'] = 0;
-        //         $response['message'] = 'User not found';
-        //         $response['code'] = 404;
-        //     }
-
-        $user = User::find($id);
-        if($user){
-             $user->update($request->all());
-            $response['status'] = 1;
-            $response['message'] = 'Data updated successfully';
-            $response['code'] = 200;
+        try{
+            $user = auth()->userOrFail();
+        }catch(UserNotDefinedException $e){
+            return response()->json(['error' => $e->getMessage()]);
         }
-        else{
-            $user = User::find($user->id);
+        if($user->role =="admin"){
+            $user = User::find($id);
             if($user){
                 $user->update($request->all());
                 if($request->password){
                     $user->password = bcrypt($request->password);
                     $user->save();
                 }
+
                 $response['status'] = 1;
-                $response['message'] = 'Your Data updated successfully';
+                $response['message'] = 'Data updated successfully';
                 $response['code'] = 200;
             }
             else{
