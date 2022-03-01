@@ -56,6 +56,7 @@ class UserController extends Controller
         }
 
         $user = auth()->user();
+        $token = $user->createToken('mytoken')->plainTextToken;
         $data['token'] = auth()->claims([
             'user_id' => $user->id,
             'user_name' => $user->fname,
@@ -66,6 +67,7 @@ class UserController extends Controller
         $response['data'] = $data;
         $response['status'] = 1;
         $response['code'] = 200;
+        $response['test'] = $token;
         $response['message'] = 'Login in successfully';
         return response()->json($response);
     }

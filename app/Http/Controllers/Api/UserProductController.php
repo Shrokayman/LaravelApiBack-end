@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\StoreUserProductRequest;
-use App\Http\Requests\UpdateUserProductRequest;
-use App\Models\UserProduct;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class UserProductController extends Controller
 {
@@ -19,22 +18,12 @@ class UserProductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreUserProductRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUserProductRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -42,21 +31,10 @@ class UserProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\UserProduct  $userProduct
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(UserProduct $userProduct)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\UserProduct  $userProduct
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(UserProduct $userProduct)
+    public function show($id)
     {
         //
     }
@@ -64,11 +42,11 @@ class UserProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateUserProductRequest  $request
-     * @param  \App\Models\UserProduct  $userProduct
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUserProductRequest $request, UserProduct $userProduct)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -76,10 +54,10 @@ class UserProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\UserProduct  $userProduct
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserProduct $userProduct)
+    public function destroy($id)
     {
         //
     }

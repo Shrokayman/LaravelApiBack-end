@@ -1,12 +1,10 @@
 <?php
 
-// ===================== Users's Wishlist ======================
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserProductsTable extends Migration
+class CreateOrderProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,11 +13,11 @@ class CreateUserProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_product', function (Blueprint $table) {
+        Schema::create('order_products', function (Blueprint $table) {
+            $table->unsignedBigInteger('order_id')->nullable();
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->unsignedBigInteger('product_id')->nullable();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -30,6 +28,6 @@ class CreateUserProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_products');
+        Schema::dropIfExists('order_products');
     }
 }

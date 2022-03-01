@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
@@ -16,16 +18,31 @@ use App\Http\Controllers\Api\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+///////////////////// Orders //////////////////////////////////////////
+
+Route::get('/orders/search/{status}', [OrderController::class, 'search']);
+Route::resource('orders', OrderController::class);
+
+////////////////////////////////////////////////////////////////////////
+
+Route::middleware('jwt.auth')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('register' , [UserController::class , 'register']);
-Route::post('login' , [UserController::class , 'login']);
+Route::middleware(['auth:sanctum'])->group(function () {
+});
+
+Route::group(['middleware' => ['jwt.auth']], function () {
+
+});
+
+//////////////////////// User ///////////////////////////////
+
+Route::post('register', [UserController::class, 'register']);
+Route::post('login', [UserController::class, 'login']);
 
 // Update user's data
-Route::put('users/{id}' ,[UserController::class , "update"]);
+Route::put('users/{id}', [UserController::class, "update"]);
 
 // Show user by id
-Route::get('users/{id}' , [UserController::class , "show"]);
-
+Route::get('users/{id}', [UserController::class, "show"]);
