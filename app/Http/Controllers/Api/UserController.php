@@ -11,6 +11,7 @@ use Tymon\JWTAuth\Exceptions\JWTExceptions;
 use Tymon\JWTAuth\Exceptions\UserNotDefinedException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
+
 class UserController extends Controller
 {
     public function register(Request $request){
@@ -72,31 +73,48 @@ class UserController extends Controller
         return response()->json($response);
     }
 
-
-    public function update(Request $request,$id){
+    public function index(){
         try{
             $user = auth()->userOrFail();
         }catch(UserNotDefinedException $e){
             return response()->json(['error' => $e->getMessage()]);
         }
-        if($user->role =="admin"){
-            $user = User::find($id);
-            if($user){
-                $user->update($request->all());
-                if($request->password){
-                    $user->password = bcrypt($request->password);
-                    $user->save();
-                }
+            //Select* From Users
+        $user= User::all();
+        return $user;
+    }
 
-                $response['status'] = 1;
-                $response['message'] = 'Data updated successfully';
-                $response['code'] = 200;
-            }
-            else{
-                $response['status'] = 0;
-                $response['message'] = 'User not found';
-                $response['code'] = 404;
-            }
+    public function update(Request $request,$id){
+        // try{
+        //     $user = auth()->userOrFail();
+        // }catch(UserNotDefinedException $e){
+        //     return response()->json(['error' => $e->getMessage()]);
+        // }
+        // if($user->role =="admin"){
+        //     $user = User::find($id);
+        //     if($user){
+        //         $user->update($request->all());
+        //         if($request->password){
+        //             $user->password = bcrypt($request->password);
+        //             $user->save();
+        //         }
+
+        //         $response['status'] = 1;
+        //         $response['message'] = 'Data updated successfully';
+        //         $response['code'] = 200;
+        //     }
+        //     else{
+        //         $response['status'] = 0;
+        //         $response['message'] = 'User not found';
+        //         $response['code'] = 404;
+        //     }
+
+        $user = User::find($id);
+        if($user){
+             $user->update($request->all());
+            $response['status'] = 1;
+            $response['message'] = 'Data updated successfully';
+            $response['code'] = 200;
         }
         else{
             $user = User::find($user->id);
@@ -139,6 +157,7 @@ class UserController extends Controller
         return response()->json($user);
     }
 
+
     public function refresh(){
         try{
             $newToken = auth()->refresh();
@@ -148,5 +167,18 @@ class UserController extends Controller
 
         return response()->json(['token' => $newToken]);
     }
+
+
+
+    public function destroy($id){
+        try{
+            $user = auth()->userOrFail();
+        }catch(UserNotDefinedException $e){
+            return response()->json(['error' => $e->getMessage()]);
+        }
+        $user = User::destroy($id);
+        return $user;
+    }
+
 
 }
