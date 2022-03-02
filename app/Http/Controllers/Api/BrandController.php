@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Brand;
+use Tymon\JWTAuth\Exceptions\UserNotDefinedException;
 
 class BrandController extends Controller
 {
@@ -15,8 +16,14 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands=Brand::all();
-        return $brands;
+        // try{
+        //     $brand = auth()->userOrFail();
+        // }catch(UserNotDefinedException $e){
+        //     return response()->json(['error' => $e->getMessage()]);
+        // }
+            //Select* From Users
+        $brand= Brand::all();
+        return $brand;
     }
 
     /**
@@ -37,9 +44,19 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
+        try{
+            $brand = auth()->userOrFail();
+        }catch(UserNotDefinedException $e){
+            return response()->json(['error' => $e->getMessage()]);
+        }
+        if($request->user()->role =="admin"){
             $brand= new Brand;
             $brand->name=$request->name;
             $brand->save();
+            return "Saved Succefully";
+        }else {
+            return "You Are Not Admin";
+        }
     }
 
     /**
@@ -82,8 +99,19 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id,Request $request)
     {
-        return Brand::destroy($id);
+        try{
+            $brand = auth()->userOrFail();
+        }catch(UserNotDefinedException $e){
+            return response()->json(['error' => $e->getMessage()]);
+        }
+        if($request->user()->role =="admin"){
+        $brand = Brand::destroy($id);
+        return $brand;
+        }else{
+            return "You Are Not Admin";
+        }
     }
-}
+    }
+

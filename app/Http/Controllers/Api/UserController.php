@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTExceptions;
-use Tymon\JWTAuth\Exceptions\UserNotDefinedException;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Exceptions\UserNotDefinedException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 
 class UserController extends Controller
@@ -80,8 +80,12 @@ class UserController extends Controller
             return response()->json(['error' => $e->getMessage()]);
         }
             //Select* From Users
+        if($user->role =="admin"){
         $user= User::all();
         return $user;
+            }else{
+                return "You Are Not Admin";
+            }
     }
 
     public function update(Request $request,$id){
@@ -109,6 +113,9 @@ class UserController extends Controller
                 $response['code'] = 404;
             }
         }
+        else{
+            return "You Are Not Admin";
+        }
         return response()->json($response);
     }
 
@@ -119,15 +126,18 @@ class UserController extends Controller
         }catch(UserNotDefinedException $e){
             return response()->json(['error' => $e->getMessage()]);
         }
-        if($user->role == "admin"){
+        // if($user->role == "admin"){
             $user = User::find($id);
             if(is_null($user)){
                 return response()->json(['message' => "User does not exist"] , 404);
             }
-        }
-        else{
-            $user = User::find($user->id);
-        }
+            else{
+                $user = User::find($user->id);
+            }
+        // }
+        // else{
+        //     return "You Are Not Admin";
+        // }
 
         return response()->json($user);
     }
@@ -151,8 +161,14 @@ class UserController extends Controller
         }catch(UserNotDefinedException $e){
             return response()->json(['error' => $e->getMessage()]);
         }
+        if($user->role =="admin"){
+
         $user = User::destroy($id);
         return $user;
+        }
+        else{
+            return "You Are Not Admin";
+        }
     }
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Tymon\JWTAuth\Exceptions\UserNotDefinedException;
 
 class CategoryController extends Controller
 {
@@ -13,10 +14,17 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $categories=Category::all();
-        return $categories;
+    public function index(){
+    // try{
+    //     $category = auth()->userOrFail();
+    // }catch(UserNotDefinedException $e){
+    //     return response()->json(['error' => $e->getMessage()]);
+    // }
+        //Select* From Users
+
+    $category= Category::all();
+    return $category;
+       
     }
 
     /**
@@ -37,10 +45,20 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $brand= new Category;
-        $brand->name=$request->name;
-        $brand->save();
-        return "category saved";
+        try{
+            $category = auth()->userOrFail();
+        }catch(UserNotDefinedException $e){
+            return response()->json(['error' => $e->getMessage()]);
+        }
+        if($request->user()->role =="admin"){
+
+        $category= new Category;
+        $category->name=$request->name;
+        $category->save();
+        return  "category saved";
+    }else{
+        return " You Are Not Admin";
+    }
     }
 
     /**
@@ -83,8 +101,19 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id,Request $request)
     {
-        return Category::destroy($id);
+        try{
+            $category = auth()->userOrFail();
+        }catch(UserNotDefinedException $e){
+            return response()->json(['error' => $e->getMessage()]);
+        }
+        if($request->user()->role =="admin"){
+            
+        $category = Category::destroy($id);
+        return $category;
+        }else{
+            return " You Are Not Admin";
+        }
     }
 }
