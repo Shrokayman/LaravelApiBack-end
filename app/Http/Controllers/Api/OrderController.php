@@ -6,6 +6,8 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Models\User;
 
 class OrderController extends Controller
 {
@@ -16,11 +18,13 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        
-        
-        if ($request->user()->role == 'admin'){
-            return Order::all();
-            
+        dd(auth());
+        $order = Order::with('User')->where('orders.user_id', 'users.id');
+
+        return $order;
+
+
+        if ($request->user()->role == 'admin') {
         }
 
         return Order::where("user_id", $request->user()->id)->get();
@@ -34,8 +38,9 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+
         return Order::create([
-            'user_id' => auth()->user(),
+            'user_id' => auth()->user()->id,
             'status' => 'pending',
             'shipping_address' => $request->shipping_address,
             'total_cost' => $request->total_cost,
@@ -51,21 +56,20 @@ class OrderController extends Controller
     public function show(Request $request, $id)
     {
 
-        if (!Order::find($id) || !Order::where("user_id", $request->user()->id)->get()->find($id, $request->user()->role == 'admin')){
-            $response['status'] = 0;
-            $response['message'] = 'Order Not Found';
-            $response['code'] = 404;
-            return response($response);
-        }
+        // if (!Order::find($id) || !Order::where("user_id", $request->user()->id)->get()->find($id, $request->user()->role == 'admin')){
+        //     $response['status'] = 0;
+        //     $response['message'] = 'Order Not Found';
+        //     $response['code'] = 404;
+        //     return response($response);
+        // }
 
-        if ($request->user()->role == 'admin'){
+        // if ($request->user()->role == 'admin'){
 
-            return Order::find($id);
 
-        }
+        // }
+        return Order::find($id);
 
         return Order::where("user_id", $request->user()->id)->get()->find($id);
-        
     }
 
     /**
@@ -80,18 +84,18 @@ class OrderController extends Controller
 
         $order = Order::find($id);
 
-        if(!$order){
+        if (!$order) {
             return "No Order Found";
         }
 
-        if (!$request->anyFilled($request->all()) == null){
+        if (!$request->anyFilled($request->all()) == null) {
             return 'Please Enter A valid Value';
         }
 
-        if($order )
-        $order->update([
-            'status' => $request->status,
-        ]);
+        if ($order)
+            $order->update([
+                'status' => $request->status,
+            ]);
         return $order;
     }
 
@@ -101,8 +105,28 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id, Response $response)
     {
+
+        $order = Order::find($id);
+
+        if (!$order) {
+
+            return response()->json('No order found', 404);
+        }
+
+        if ($request->user()->role == 'admin') {
+
+            return Order::destroy($id) . "deleted";
+        }
+
+        if ($request->user()->role !== "admin" && !Order::where("user_id", $request->user()->id)->get()->find($id)) {
+
+            return "denied";
+        }
+
+
+
         return Order::destroy($id);
     }
 
@@ -114,6 +138,6 @@ class OrderController extends Controller
      */
     public function search($status)
     {
-        return Order::where('status', 'like', '%'.$status.'%')->get();
+        return Order::where('status', 'like', '%' . $status . '%')->get();
     }
 }

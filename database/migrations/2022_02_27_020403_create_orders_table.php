@@ -15,8 +15,8 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('status');
-            $table->string('shipping_address')->nullable();
+            $table->string('status')->default('pending');
+            $table->string('shipping_address');
             $table->integer('total_cost');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

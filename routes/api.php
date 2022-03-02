@@ -20,8 +20,14 @@ use App\Http\Controllers\Api\UserController;
 
 ///////////////////// Orders //////////////////////////////////////////
 
-Route::get('/orders/search/{status}', [OrderController::class, 'search']);
-Route::resource('orders', OrderController::class);
+Route::get('/orders', [OrderController::class, 'index']);
+Route::get('/order/{id}', [OrderController::class, 'show']);
+Route::put('/orders/{id}', [OrderController::class, 'update']);
+Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
+Route::post('/order', [OrderController::class, 'store']);
+
+
+// Route::resource('orders', OrderController::class);
 
 ////////////////////////////////////////////////////////////////////////
 
