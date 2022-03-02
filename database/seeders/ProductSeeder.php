@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ProductSeeder extends Seeder
 {
@@ -13,6 +15,89 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $products = [
+            ['name' => 'jacket',
+            'image' =>Str::random(10),
+            'description' =>Str::random(10),
+            'price' => 100,
+            'discount' => 10,
+            'category_id' => 1,
+            'brand_id' => 1
+        ],
+            ['name' => 't-shirt',
+            'image' =>Str::random(10),
+            'description' =>Str::random(10),
+            'price' => 120,
+            'discount' => 15,
+            'category_id' => 2,
+            'brand_id' => 2
+        ],
+            ['name' => 'hat',
+            'image' =>Str::random(10),
+            'description' =>Str::random(10),
+            'price' => 100,
+            'discount' => 20,
+            'category_id' => 3,
+            'brand_id' => 3
+        ],
+            ['name' => 'trendi',
+            'image' =>Str::random(10),
+            'description' =>Str::random(10),
+            'price' => 150,
+            'discount' => null,
+            'category_id' => 4,
+            'brand_id' => 4
+        ],
+            ['name' => 'elegent',
+            'image' =>Str::random(10),
+            'description' =>Str::random(10),
+            'price' => 200,
+            'discount' => 10,
+            'category_id' => 5,
+            'brand_id' => 5
+        ],
+            ['name' => 'cool',
+            'image' =>Str::random(10),
+            'description' =>Str::random(10),
+            'price' => 100,
+            'discount' => null,
+            'category_id' => 6,
+            'brand_id' => 6
+        ],
+            ['name' => 'funky',
+            'image' =>Str::random(10),
+            'description' =>Str::random(10),
+            'price' => 300,
+            'discount' => 30,
+            'category_id' => 7,
+            'brand_id' => 7
+        ],
+            ['name' => 'trade',
+            'image' =>Str::random(10),
+            'description' =>Str::random(10),
+            'price' => 300,
+            'discount' => 30,
+            'category_id' => 8,
+            'brand_id' => 8,
+        ],
+            ['name' => 'sport',
+            'image' =>Str::random(10),
+            'description' =>Str::random(10),
+            'price' => 300,
+            'discount' => 30,
+            'category_id' => 9,
+            'brand_id' => 9
+        ],
+            ['name' => 'casual',
+            'image' =>Str::random(10),
+            'description' =>Str::random(10),
+            'price' => 300,
+            'discount' => null,
+            'category_id' => 10,
+            'brand_id' => 10
+        ],
+        ];
+
+        DB::table('products')->insert($products);
     }
 }

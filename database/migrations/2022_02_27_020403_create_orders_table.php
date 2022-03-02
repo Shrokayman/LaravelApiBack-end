@@ -18,7 +18,7 @@ class CreateOrdersTable extends Migration
             $table->string('status')->default('pending');
             $table->string('shipping_address');
             $table->integer('total_cost');
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

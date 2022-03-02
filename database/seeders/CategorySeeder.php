@@ -25,6 +25,7 @@ class CategorySeeder extends Seeder
             ['name' => 'long sleeves'],
             ['name' => 'short sleeves'],
             ['name' => 'coats'],
+            ['name' => 'uni-sex'],
         ];
 
         DB::table('categories')->insert($categories);

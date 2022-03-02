@@ -25,6 +25,7 @@ class OrderController extends Controller
 
 
         if ($request->user()->role == 'admin') {
+            return Order::all();
         }
 
         return Order::where("user_id", $request->user()->id)->get();
