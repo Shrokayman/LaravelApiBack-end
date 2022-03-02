@@ -126,18 +126,15 @@ class UserController extends Controller
         }catch(UserNotDefinedException $e){
             return response()->json(['error' => $e->getMessage()]);
         }
-        // if($user->role == "admin"){
+        if($user->role == "admin"){
             $user = User::find($id);
             if(is_null($user)){
                 return response()->json(['message' => "User does not exist"] , 404);
             }
-            else{
-                $user = User::find($user->id);
-            }
-        // }
-        // else{
-        //     return "You Are Not Admin";
-        // }
+        }
+        else{
+            $user = User::find($user->id);
+        }
 
         return response()->json($user);
     }
