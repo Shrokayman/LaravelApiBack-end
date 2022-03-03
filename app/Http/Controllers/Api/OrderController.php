@@ -163,7 +163,7 @@ class OrderController extends Controller
 
         if ($request->user()->role == 'admin') {
 
-            return Order::destroy($id) . "deleted";
+            return Order::destroy($id);
         }
 
         if ($request->user()->role !== "admin" && !Order::where("user_id", $request->user()->id)->get()->find($id)) {
