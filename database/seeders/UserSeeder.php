@@ -76,7 +76,7 @@ class UserSeeder extends Seeder
             'city' => 'new york',
             'street' => 'khattab',
             'phone' => 123456789,
-            'role' => 'admin',
+            'role' => 'user',
         ],
         [
             'fname' => 'Will',
@@ -86,7 +86,7 @@ class UserSeeder extends Seeder
             'city' => 'florida',
             'street' => 'khattab',
             'phone' => 123456789,
-            'role' => 'admin',
+            'role' => 'user',
         ],
         [
             'fname' => 'Jason',
@@ -96,7 +96,7 @@ class UserSeeder extends Seeder
             'city' => 'london',
             'street' => 'khattab',
             'phone' => 123456789,
-            'role' => 'admin',
+            'role' => 'user',
         ],
         [
             'fname' => 'Dawyn',
@@ -106,7 +106,7 @@ class UserSeeder extends Seeder
             'city' => 'boston',
             'street' => 'khattab',
             'phone' => 123456789,
-            'role' => 'admin',
+            'role' => 'user',
         ],
         [
             'fname' => 'Tom',
@@ -116,7 +116,7 @@ class UserSeeder extends Seeder
             'city' => 'califorina',
             'street' => 'khattab',
             'phone' => 123456789,
-            'role' => 'admin',
+            'role' => 'user',
         ],
         ];
 

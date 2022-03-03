@@ -16,8 +16,10 @@ class Order extends Model
         'total_cost'
     ];
 
+
+
     public function products(){
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class, 'order_products')->withPivot('product_quantity');
     }
 
     public function user(){

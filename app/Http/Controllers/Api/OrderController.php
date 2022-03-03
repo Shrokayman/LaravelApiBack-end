@@ -6,6 +6,9 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Product;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 
@@ -18,17 +21,19 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        dd(auth());
-        $order = Order::with('User')->where('orders.user_id', 'users.id');
+        $orders = Order::with('user')->get();
 
-        return $order;
-
-
-        if ($request->user()->role == 'admin') {
-            return Order::all();
+        if (!$request->user()) {
+            return response()->json('You are not signed in', 404);
         }
 
-        return Order::where("user_id", $request->user()->id)->get();
+        if ($request->user()->role == 'admin') {
+            return response()->json($orders, 200);
+        }
+
+        $userOrders = Order::with('user')->get()->where("user_id", $request->user()->id);
+
+        return response()->json($userOrders, 200);
     }
 
     /**
@@ -39,13 +44,61 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        $total_cost = 0;
 
-        return Order::create([
+        if ($request->user()->role == 'admin') {
+            if (!$request->user_id) {
+                return response()->json('Please Provide User', 404);
+            }
+            $order = Order::create([
+                'user_id' => $request->user_id,
+                'shipping_address' => $request->shipping_address,
+            ]);
+            $order->save();
+
+            foreach ($request->products as $product) {
+                $selectedProduct = Product::where('id', $product['id'])->first();
+                if ($selectedProduct) {
+                    $count = $product['quantity'];
+                    $total_cost += $selectedProduct->price * $count;
+
+                    $order->products()->attach($selectedProduct->id, ['product_quantity' => $count]);
+                }
+            }
+            $order->update([
+                'total_cost' => $total_cost
+            ]);
+
+            $order->save();
+
+
+            return Order::where('id', $order->id)->with('products')->first();
+        }
+
+        $order = Order::create([
             'user_id' => auth()->user()->id,
-            'status' => 'pending',
             'shipping_address' => $request->shipping_address,
-            'total_cost' => $request->total_cost,
         ]);
+
+        $order->save();
+
+        foreach ($request->products as $product) {
+            $selectedProduct = Product::where('id', $product['id'])->first();
+            if ($selectedProduct) {
+                $count = $product['quantity'];
+                $total_cost += $selectedProduct->price * $count;
+
+                $order->products()->attach($selectedProduct->id, ['product_quantity' => $count]);
+            }
+        }
+        $order->update([
+            'total_cost' => $total_cost
+        ]);
+
+        $order->save();
+
+
+        return Order::where('id', $order->id)->with('products')->first();
     }
 
     /**
@@ -56,21 +109,13 @@ class OrderController extends Controller
      */
     public function show(Request $request, $id)
     {
+        $order = Order::find($id);
+        $user = Order::find($id)->user;
+        $product = Order::find($id)->products;
+        $productBrand = Brand::where('id', $product[0]->brand_id)->get();
+        $productCategory = Category::where('id', $product[0]->brand_id)->get();
 
-        // if (!Order::find($id) || !Order::where("user_id", $request->user()->id)->get()->find($id, $request->user()->role == 'admin')){
-        //     $response['status'] = 0;
-        //     $response['message'] = 'Order Not Found';
-        //     $response['code'] = 404;
-        //     return response($response);
-        // }
-
-        // if ($request->user()->role == 'admin'){
-
-
-        // }
-        return Order::find($id);
-
-        return Order::where("user_id", $request->user()->id)->get()->find($id);
+        return response()->json(array(['order' => $order,'user' => $user, 'product' => $product, 'brand' => $productBrand, 'category' => $productCategory]),200);
     }
 
     /**
@@ -85,19 +130,19 @@ class OrderController extends Controller
 
         $order = Order::find($id);
 
-        if (!$order) {
-            return "No Order Found";
-        }
+        // if (!$order) {
+        //     return "No Order Found";
+        // }
 
-        if (!$request->anyFilled($request->all()) == null) {
-            return 'Please Enter A valid Value';
-        }
+        // if (!$request->anyFilled($request->all()) == null) {
+        //     return 'Please Enter A valid Value';
+        // }
 
-        if ($order)
-            $order->update([
-                'status' => $request->status,
-            ]);
-        return $order;
+        //     if ($order)
+        // ]);
+        $order->status = $request->status;
+        $order->save();
+        return response()->json(array('order' => $order), 200);
     }
 
     /**

@@ -89,7 +89,7 @@ class ProductSeeder extends Seeder
             'brand_id' => 9
         ],
             ['name' => 'casual',
-            'image' =>Str::random(10),
+            'image' => 'img/feature_prod_01.jpg',
             'description' =>Str::random(10),
             'price' => 300,
             'discount' => null,
