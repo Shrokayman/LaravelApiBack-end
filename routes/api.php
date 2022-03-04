@@ -48,9 +48,11 @@ Route::delete('users/{id}' , [UserController::class , "destroy"]);
 
 
 Route::get('/brands',[BrandController::class,'index']);
+Route::get('/brands/{id}',[BrandController::class,'getProducts']);
 Route::post('/brands',[BrandController::class,'store']);
 Route::delete('brands/{id}',[BrandController::class,'destroy']);
 Route::get('/categories',[CategoryController::class,'index']);
+Route::get('/categories/{id}',[BrandController::class,'getProducts']);
 Route::post('/categories',[CategoryController::class,'store']);
 Route::delete('/categories/{id}',[CategoryController::class,'destroy']);
 

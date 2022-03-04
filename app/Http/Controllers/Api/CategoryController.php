@@ -49,9 +49,13 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function getProducts($id)
     {
-
+        $brand = Category::find($id);
+        if(is_null($category)){
+            return response()->json(['message' => "Brand does not exist"] , 404);
+        }
+        return response()->json($category->products());
     }
 
     /**
