@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ProductController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,8 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('register' , [UserController::class , 'register']);
-Route::post('login' , [UserController::class , 'login']);
+Route::post('/register' , [UserController::class , 'register']);
+Route::post('/login' , [UserController::class , 'login']);
 
 
 
@@ -52,3 +54,24 @@ Route::get('/categories',[CategoryController::class,'index']);
 Route::post('/categories',[CategoryController::class,'store']);
 Route::delete('/categories/{id}',[CategoryController::class,'destroy']);
 
+///////////////////////////////////////////////////////////////////////
+//                         Products                                  //
+///////////////////////////////////////////////////////////////////////
+
+// List
+Route::get('/products', [ProductController::class,'index']);
+
+// Store
+Route::post('/products', [ProductController::class,'store']);
+
+// Show Single Product
+Route::get('/product/{id}',[ProductController::class,'show']);
+
+// Update
+Route::put('/products/{id}',[ProductController::class,'update']);
+
+// Delete
+Route::delete('/products/{id}',[ProductController::class,'destroy']);
+
+// Search -- Tested In Postman
+Route::get('/products/search/{name}',[ProductController::class,'search']);
