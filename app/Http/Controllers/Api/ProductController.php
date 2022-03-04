@@ -59,21 +59,30 @@ class ProductController extends Controller
         //      return " You Are Not Admin";
         //  }
         $product = new Product;
+
+        if($request->hasFile('image')){
+            $compliteFileName = $request->file('image')->getClientOriginalName();
+            $filaNameOnly = pathinfo($compliteFileName , PATHINFO_FILENAME);
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $comPic = str_replace(' ' , '_' , $filaNameOnly).'-'.rand() . '_'.time(). '.'.$extension;
+            $path = $request->file('image')->storeAs('public/products' , $comPic);
+            $product->image=$comPic;
+        }
         $category= $request->category;
         $product->name=$request->name;
         $product->description=$request->description;
         $product->price=$request->price;
         $product->discount=$request->discount;
-        $product->image=$request->image;
         $product->category_id=$request->category_id;
         $product->brand_id=$request->brand_id;
+        $product->average_rate= 0;
         $product->save();
         if($product->save()){
             return response()->json($product, 201);
         }else {
             return ['status' => false, 'message' => 'Couldnt Save Image'];
         }
-    
+
     }
 
     /**
@@ -93,7 +102,7 @@ class ProductController extends Controller
 
         $productBrand = Brand::where('id', $product[0]->brand_id)->get();
         $productCategory = Category::where('id', $product[0]->brand_id)->get();
-                    
+
         //  return rarray($product, $brandName));
         //  return response()->json(array('product' => $product, 'categoryName' => $categoryName, 'brandName' => $brandName));
         return response()->json(array(['product' => $product, 'brand' => $productBrand, 'category' => $productCategory]),200);
