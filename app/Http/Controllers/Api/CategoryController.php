@@ -51,11 +51,11 @@ class CategoryController extends Controller
      */
     public function getProducts($id)
     {
-        $brand = Category::find($id);
+        $category = Category::find($id);
         if(is_null($category)){
-            return response()->json(['message' => "Brand does not exist"] , 404);
+            return response()->json(['message' => "Category does not exist"] , 404);
         }
-        return response()->json($category->products());
+        return $category->products;
     }
 
     /**
