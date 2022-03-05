@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Brand;
 
 class BrandController extends Controller
 {
@@ -14,7 +15,8 @@ class BrandController extends Controller
      */
     public function index()
     {
-        //
+        $brands=Brand::all();
+        return $brands;
     }
 
     /**
@@ -25,7 +27,9 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        //
+            $brand= new Brand;
+            $brand->name=$request->name;
+            $brand->save();
     }
 
     /**
@@ -34,9 +38,13 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function getProducts($id)
     {
-        //
+        $brand = Brand::find($id);
+        if(is_null($brand)){
+            return response()->json(['message' => "Brand does not exist"] , 404);
+        }
+        return response()->json($brand->products());
     }
 
     /**
@@ -59,6 +67,6 @@ class BrandController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return Brand::destroy($id);
     }
 }
