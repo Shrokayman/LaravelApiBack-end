@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
 use App\Models\User;
+use Tymon\JWTAuth\Exceptions\UserNotDefinedException;
 
 // use App\Http\Requests\StoreProductRequest;
 // use App\Http\Requests\UpdateProductRequest;
@@ -21,12 +22,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product::all();
+        $product = Product::with("brand","category")->get();
         // $categoryName = $product->category()->get()->first()->name;
         // $brandName = $product->brand()->get()->first()->name;
         return $product;
         // return json(array('product' => $product, 'categoryName' => $categoryName, 'brandName' => $brandName),);
-
     }
 
     /**
@@ -35,29 +35,8 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //  try{
-        //      $user = auth()->userOrFail();
-        //  }catch(UserNotDefinedException $e){
-        //      return response()->json(['error' => $e->getMessage()]);
-        //  }
-        //  if($request->user()->role =="admin"){
-        //      $product = new Product;
-        //      $category= $request->category;
-        //      $product->name=$request->name;
-        //      $product->description=$request->description;
-        //      $product->price=$request->price;
-        //      $product->discount=$request->discount;
-        //      $product->image=$request->image;
-        //      $product->category_id=$request->category_id;
-        //      $product->brand_id=$request->brand_id;
-        //      $product->save();
-        //      return "Product Saved";
-
-        //  }else{
-        //      return " You Are Not Admin";
-        //  }
+    public function store(Request $request){
+ 
         $product = new Product;
 
         if($request->hasFile('image')){
@@ -90,23 +69,22 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
     */
-     public function show(Request $request, $id)
+     public function show($id)
     {
         //
-        $product =  Product::find($id);
+        $product=Product::with("brand")->find($id);
+        // $cat_id = $product->category_id;
+        // $related_products=Product::where('category_id',$cat_id)->Limit(4)->get();
+        return response()->json($product); 
 
-        // $categoryName  =$product->category()->get()->find($product['category_id'])->name;
-        // $brandName = $product->brand()->get()->find($product['brand_id'])->name;
-        // $brandId = $product[0]['brand_id'];
-        // $brandName = $product[1]['brand'];
+    }
+    public function showRealted($id){
+        $product=Product::with("brand")->find($id);
+        $cat_id = $product->category_id;
+        $related_products=Product::where('category_id',$cat_id)->Limit(10)->get();
+        return response()->json($related_products);
 
-        $productBrand = Brand::where('id', $product[0]->brand_id)->get();
-        $productCategory = Category::where('id', $product[0]->brand_id)->get();
-
-        //  return rarray($product, $brandName));
-        //  return response()->json(array('product' => $product, 'categoryName' => $categoryName, 'brandName' => $brandName));
-        return response()->json(array(['product' => $product, 'brand' => $productBrand, 'category' => $productCategory]),200);
-        }
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -114,17 +92,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
       */
-    // public function edit($id)
-    // {
-    //     $product= Product::find($id);
-    //     if(is_null($product)){
-    //         return response()->json(['message' =>'Product Not Found', 404]);
-    //     }
-    //     return response()->array($product::find($id));
-    //     // $categoryName = $product->category()->get()->first()->name;
-    //     //  $brandName = $product->brand()->get()->first()->name;
-    //     //  return array('product' => $product, 'categoryName' => $categoryName, 'brandName' => $brandName);
-    // }
+
 
     /**
      * Update the specified resource in storage.
@@ -133,28 +101,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    // public function update(Request $request, $id)
-    // {
 
-    //     $product = Product::find($id);
-    //     if(is_null($product)){
-    //         return response()->json(['message' =>'Product Not Found' , 404]);
-    //     }
-
-    //     $product->name=$request->name;
-    //     $product->image=$request->image;
-    //     $product->description=$request->description;
-    //     $product->price=$request->price;
-    //     $product->discount=$request->discount;
-    //     // $product->average_rate=$request->average_rate;
-    //     $categoryName = $product->category()->get()->first()->name;
-    //     $brandName = $product->brand()->get()->first()->name;
-    //     // $product->category_id = $request->category_id;
-    //     // $product->brand_id = $request->brand_id;
-    //     $product->save();
-    //     return response()->json(array('product' => $product, 'categoryName' => $categoryName, 'brandName' => $brandName), 200);
-
-    // }
     public function update(Request $request,$id){
         try{
             $user = auth()->userOrFail();
