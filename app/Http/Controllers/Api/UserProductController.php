@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\UserProduct;
 use App\Models\User;
+use App\Models\Product;
+
 
 class UserProductController extends Controller
 {
@@ -16,10 +18,11 @@ class UserProductController extends Controller
      */
     public function index()
     {
-        // $userProduct=User::where('id', 1)->products();
-        // return $userProduct;
-        // $user = User::find(1)->products();
-        // return response()->json($user);
+        
+
+        // $user=User::with("products")->find(1);
+
+        // return $user;
     }
 
     /**
@@ -61,7 +64,9 @@ class UserProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $user=User::with("products")->find($id);
+
+        return $user;
     }
 
     /**
