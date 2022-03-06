@@ -207,4 +207,11 @@ class ProductController extends Controller
     {
     return Product::where('name', 'like', '%'.$name.'%')->get();
     }
+
+    public function rating()
+    {
+    $products= Product::orderBy('average_rate','desc')->take(3)->get();
+    return $products;
+    }
+
 }

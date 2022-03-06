@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\UserProductController;
 
 
 /*
@@ -77,3 +78,13 @@ Route::delete('/products/{id}',[ProductController::class,'destroy']);
 
 // Search -- Tested In Postman
 Route::get('/products/search/{name}',[ProductController::class,'search']);
+
+// Top products
+Route::get('/topproducts',[ProductController::class,'rating']);
+
+
+////////////////////// WishList///////////////////////
+Route::post('/userproducts', [UserProductController::class,'store']);
+Route::delete('/userproducts/{id}/{user_id}',[UserProductController::class,'destroy']);
+Route::get('/userproducts', [UserProductController::class,'index']);
+
