@@ -17,6 +17,19 @@ class BrandController extends Controller
     {
         $brands=Brand::all();
         return $brands;
+
+
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+
     }
 
     /**
@@ -44,7 +57,22 @@ class BrandController extends Controller
         if(is_null($brand)){
             return response()->json(['message' => "Brand does not exist"] , 404);
         }
+
         return response()->json($brand->products());
+
+        return $brand->products;
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+
     }
 
     /**
