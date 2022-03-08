@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\BrandController;
+use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
@@ -8,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Models\Brand;
+use App\Models\Cart;
 use App\Models\Product;
 
 
@@ -30,7 +32,7 @@ Route::get('/order/{id}', [OrderController::class, 'show']);
 Route::put('/orders/{id}', [OrderController::class, 'update']);
 Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
 Route::post('/orders', [OrderController::class, 'store']);
-Route::get('/products', [ProductController::class, 'index']);
+
 
 // Route::resource('orders', OrderController::class);
 
@@ -52,14 +54,6 @@ Route::group(['middleware' => ['jwt.auth']], function () {
 
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
-
-
-
-
-Route::post('/register', [UserController::class, 'register']);
-Route::post('/login', [UserController::class, 'login']);
-
-
 
 // Show All Users
 Route::get('users', [UserController::class, "index"]);
@@ -90,16 +84,6 @@ Route::get('categories/{id}', [BrandController::class, 'getProducts']);
 Route::post('categories', [CategoryController::class, 'store']);
 Route::delete('categories/{id}', [CategoryController::class, 'destroy']);
 
-Route::get('/brands', [BrandController::class, 'index']);
-Route::get('/brands/{id}', [BrandController::class, 'getProducts']);
-Route::post('/brands', [BrandController::class, 'store']);
-Route::delete('brands/{id}', [BrandController::class, 'destroy']);
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/categories/{id}', [CategoryController::class, 'getProducts']);
-Route::post('/categories', [CategoryController::class, 'store']);
-Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
-
-
 ///////////////////////////////////////////////////////////////////////
 //                         Products                                  //
 ///////////////////////////////////////////////////////////////////////
@@ -121,3 +105,12 @@ Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 
 // Search -- Tested In Postman
 Route::get('/products/search/{name}', [ProductController::class, 'search']);
+
+
+///////////////////////// Cart ////////////////////////////////////
+
+Route::get('/carts', [CartController::class, 'index']);
+Route::get('/carts/{id}', [CartController::class, 'show']);
+Route::post('/carts', [CartController::class, 'store']);
+Route::put('/carts/{id}', [CartController::class, 'update']);
+Route::delete('/carts/{id}', [CartController::class, 'destroy']);

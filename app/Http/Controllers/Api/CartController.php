@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\CartProduct;
+
+use function PHPUnit\Framework\at;
 
 class CartController extends Controller
 {
@@ -14,7 +19,7 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
+        return Cart::all();
     }
 
     /**
@@ -25,7 +30,24 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $cart = Cart::create([
+            'user_id' => $request->user()->id
+        ]);
+        $cart->save();
+
+        foreach ($request->products as $product) {
+            $selectedProduct = Product::where('id', $product['id'])->first();
+            if ($selectedProduct) {
+                $count = $product['quantity'];
+
+                $cart->products()->attach($selectedProduct->id, ['product_quantity' => $count]);
+            }
+        }
+
+        $cart->save();
+
+        return Cart::where('id', $cart->id)->with('products')->first();
     }
 
     /**
@@ -34,9 +56,11 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $cart = Cart::with('products')->where('user_id', $request->user()->id)->find($id);
+
+        return $cart;
     }
 
     /**
@@ -48,7 +72,21 @@ class CartController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Cart::with('products')->where('user_id', $request->user()->id)->find($id);
+
+        $cart = [];
+
+        // return dd($request->products[1]['id']);
+        foreach($request->products as $product){
+
+            Cart::find($id)->products()->syncWithPivotValues(['product_id' => $product['id']], ['product_quantity' => $product['quantity']]);
+
+        }
+
+        $cart =  Cart::find($id)->products()->syncWithPivotValues(['product_id' => $product['id']], ['product_quantity' => $product['quantity']]);
+
+        return dd($cart);
+
     }
 
     /**
@@ -59,6 +97,6 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return Cart::destroy($id);
     }
 }

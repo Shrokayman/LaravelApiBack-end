@@ -22,17 +22,6 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -56,28 +45,16 @@ class CategoryController extends Controller
     {
 
         $brand = Category::find($id);
+        $category = Category::find($id);
         if(is_null($category)){
             return response()->json(['message' => "Brand does not exist"] , 404);
         }
         return response()->json($category->products());
 
-        $category = Category::find($id);
         if(is_null($category)){
             return response()->json(['message' => "Category does not exist"] , 404);
         }
         return $category->products;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-
     }
 
     /**
