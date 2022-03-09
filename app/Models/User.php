@@ -76,7 +76,7 @@ class User extends Authenticatable implements JWTSubject
 
     // Users's wishlist
     public function products(){
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class,'user_product');
     }
 
 

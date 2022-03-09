@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\UserProductController;
 
 
 /*
@@ -67,13 +68,28 @@ Route::get('/products', [ProductController::class,'index']);
 Route::post('/products', [ProductController::class,'store']);
 
 // Show Single Product
-Route::get('/product/{id}',[ProductController::class,'show']);
+Route::get('/products/{id}',[ProductController::class,'show']);
 
 // Update
-Route::put('/products/{id}',[ProductController::class,'update']);
+Route::put('products/{id}',[ProductController::class,'update']);
 
 // Delete
 Route::delete('/products/{id}',[ProductController::class,'destroy']);
 
 // Search -- Tested In Postman
 Route::get('/products/search/{name}',[ProductController::class,'search']);
+
+
+// Top products
+Route::get('/topproducts',[ProductController::class,'rating']);
+
+
+////////////////////// WishList///////////////////////
+Route::post('/userproducts', [UserProductController::class,'store']);
+Route::delete('/userproducts/{id}/{user_id}',[UserProductController::class,'destroy']);
+Route::get('/userproducts/{id}', [UserProductController::class,'show']);
+
+
+// Show Related Products
+
+Route::get('/products/show/{id}',[ProductController::class,'showRealted']);
