@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\CartProduct;
+use App\Models\User;
 
 use function PHPUnit\Framework\at;
 
@@ -19,7 +20,9 @@ class CartController extends Controller
      */
     public function index()
     {
-        return Cart::all();
+        $carts = Cart::all();
+
+        return response()->json($carts, 200);
     }
 
     /**
@@ -58,9 +61,11 @@ class CartController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $cart = Cart::with('products')->where('user_id', $request->user()->id)->find($id);
+        $cart = Cart::with('user', 'products')->where('user_id', $id)->get();
+        // $product = Cart::with('products')->where('user_id', $request->user()->id)->get();
+        // $cart = Cart::with('products')->where('user_id', $request->user()->id)->find($id);
 
-        return $cart;
+        return response()->json($cart, 200);
     }
 
     /**
@@ -72,20 +77,21 @@ class CartController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Cart::with('products')->where('user_id', $request->user()->id)->find($id);
+        $cart = Cart::with('products')->where('user_id', $request->user()->id)->find($id);
+
 
         $cart = [];
 
         // return dd($request->products[1]['id']);
         foreach($request->products as $product){
 
-            Cart::find($id)->products()->syncWithPivotValues(['product_id' => $product['id']], ['product_quantity' => $product['quantity']]);
+            // Cart::find($id)->products()->updateExistingPivot([$cart_id,$product_id,$product_quantity]);
 
         }
 
-        $cart =  Cart::find($id)->products()->syncWithPivotValues(['product_id' => $product['id']], ['product_quantity' => $product['quantity']]);
+        // $cart =  Cart::find($id)->products()->updateExistingPivot([$cart_id,$product_id,$product_quantity],['active'=> true]);
 
-        return dd($cart);
+        return ($cart);
 
     }
 

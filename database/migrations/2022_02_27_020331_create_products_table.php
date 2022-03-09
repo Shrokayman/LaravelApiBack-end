@@ -18,7 +18,7 @@ class CreateProductsTable extends Migration
             $table->string('name')->unique();
             $table->string('image');
             $table->string('description');
-            $table->decimal('price', 8, 2);
+            $table->float('price', 8, 2);
             $table->integer('discount')->nullable();
             $table->integer('average_rate')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
