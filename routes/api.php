@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserProductController;
+use App\Http\Controllers\Api\ReviewsController;
 
 
 /*
@@ -93,3 +94,12 @@ Route::get('/userproducts/{id}', [UserProductController::class,'show']);
 // Show Related Products
 
 Route::get('/products/show/{id}',[ProductController::class,'showRealted']);
+
+// Get Product Reviews
+Route::get('/reviews', [ReviewsController::class,'index']);
+
+// Get Avg  Rate For Each product
+Route::get('/products/rate/{id}', [ReviewsController::class,'showRates']);
+
+// check if product in wishlist
+Route::get('/products/wishlist/{id}', [ProductController::class,'checkProduct']);

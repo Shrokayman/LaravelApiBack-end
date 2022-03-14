@@ -71,19 +71,33 @@ class ProductController extends Controller
     */
      public function show($id)
     {
-        //
-        $product=Product::with("brand")->find($id);
-        // $cat_id = $product->category_id;
-        // $related_products=Product::where('category_id',$cat_id)->Limit(4)->get();
-        return response()->json($product); 
-
+        if(
+        $wishproduct= Product::with("brand")->where(function($query) { 
+            $query->has('WishedProduct');
+        })->find($id)){
+        return response()->json($wishproduct); 
+    }else{
+            $product=Product::with("brand")->find($id);
+            return response()->json($product); 
+        // return "Not in Wishlist";
+    };
+}
+        // Check if Product in WishList
+        public function checkProduct($id){
+        if(
+              Product::with("brand")->where(function($query) { 
+                $query->has('WishedProduct');
+            })->find($id)){
+            return true; 
+        }else{
+                return false; 
+    }
     }
     public function showRealted($id){
         $product=Product::with("brand")->find($id);
         $cat_id = $product->category_id;
         $related_products=Product::where('category_id',$cat_id)->Limit(10)->get();
         return response()->json($related_products);
-
     }
 
     /**

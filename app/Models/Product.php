@@ -13,7 +13,7 @@ class Product extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name','image','description','price','discount','average_rate','category_id','brand_id'
+        'name','image','description','price','discount','average_rate','category_id','brand_id',
     ];
 
     public function reviews(){
@@ -27,4 +27,8 @@ class Product extends Model
     public function brand(){
         return $this->belongsTo(Brand::class);
     }
-}
+    public function WishedProduct()
+    {
+    return $this->hasOne(UserProduct::class);
+    }
+    }

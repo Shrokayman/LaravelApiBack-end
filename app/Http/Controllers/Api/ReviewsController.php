@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\StoreReviewsRequest;
 use App\Http\Requests\UpdateReviewsRequest;
-use App\Models\Reviews;
+use App\Models\Review;
+use App\Http\Controllers\Controller;
 
 class ReviewsController extends Controller
 {
@@ -15,7 +16,11 @@ class ReviewsController extends Controller
      */
     public function index()
     {
-        //
+        $reviews = Review::all();
+        return $reviews;
+        // $rates = Review::withCount('rate')->get();
+        // $rates = Review::avg('rate');
+        // return $rates;
     }
 
     /**
@@ -34,7 +39,7 @@ class ReviewsController extends Controller
      * @param  \App\Http\Requests\StoreReviewsRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreReviewsRequest $request)
+    public function store()
     {
         //
     }
@@ -45,9 +50,19 @@ class ReviewsController extends Controller
      * @param  \App\Models\Reviews  $reviews
      * @return \Illuminate\Http\Response
      */
-    public function show(Reviews $reviews)
+    public function show($id)
     {
-        //
+        // $review = Review::where('product_id','=',$id)->get();
+        // return $review;
+    }
+    public function showRates($id)
+    {
+        if($avgRates = Review::where('product_id','=',$id)->avg('rate')){
+
+            return $avgRates;
+        }else{
+            return "Product Have Not Rated yet !!";
+        }
     }
 
     /**
@@ -56,7 +71,7 @@ class ReviewsController extends Controller
      * @param  \App\Models\Reviews  $reviews
      * @return \Illuminate\Http\Response
      */
-    public function edit(Reviews $reviews)
+    public function edit()
     {
         //
     }
@@ -68,7 +83,7 @@ class ReviewsController extends Controller
      * @param  \App\Models\Reviews  $reviews
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateReviewsRequest $request, Reviews $reviews)
+    public function update()
     {
         //
     }
@@ -79,7 +94,7 @@ class ReviewsController extends Controller
      * @param  \App\Models\Reviews  $reviews
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Reviews $reviews)
+    public function destroy()
     {
         //
     }
