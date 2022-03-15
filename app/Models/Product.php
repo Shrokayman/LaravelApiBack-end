@@ -15,6 +15,16 @@ class Product extends Model
     protected $fillable = [
         'name','image','description','price','discount','average_rate','category_id','brand_id',
     ];
+    // protected $append = ['is_wished'];
+
+    public function isWished()
+    {
+        if(auth()->check()){
+            return $this->wishedProduct()->whereUserId(auth()->id())->exists();
+            }else{
+            return false;
+            }    
+        } 
 
     public function reviews(){
         return $this->hasMany(Review::class);
@@ -27,8 +37,8 @@ class Product extends Model
     public function brand(){
         return $this->belongsTo(Brand::class);
     }
-    public function WishedProduct()
+    public function wishedProduct()
     {
-    return $this->hasOne(UserProduct::class);
+    return $this->belongsToMany(User::class,UserProduct::class);
     }
     }

@@ -15,4 +15,5 @@ class UserProduct extends Model
 
     protected $table = 'user_product';
     public $timestamps = false;
+    
 }

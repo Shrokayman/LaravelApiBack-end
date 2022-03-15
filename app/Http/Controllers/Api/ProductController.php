@@ -22,11 +22,13 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product::with("brand","category")->get();
-        // $categoryName = $product->category()->get()->first()->name;
-        // $brandName = $product->brand()->get()->first()->name;
-        return $product;
-        // return json(array('product' => $product, 'categoryName' => $categoryName, 'brandName' => $brandName),);
+        $products = Product::with("brand","category")->get();
+        $result = [];
+        foreach($products as $product){
+            $product["isWished"]=$product->isWished();
+        }
+
+        return response()->json($products);
     }
 
     /**
@@ -75,24 +77,26 @@ class ProductController extends Controller
         $wishproduct= Product::with("brand")->where(function($query) { 
             $query->has('WishedProduct');
         })->find($id)){
+            $wishproduct["isWished"]=$wishproduct->isWished();
         return response()->json($wishproduct); 
     }else{
             $product=Product::with("brand")->find($id);
+            $product["isWished"]=$product->isWished();
             return response()->json($product); 
         // return "Not in Wishlist";
     };
 }
         // Check if Product in WishList
-        public function checkProduct($id){
-        if(
-              Product::with("brand")->where(function($query) { 
-                $query->has('WishedProduct');
-            })->find($id)){
-            return true; 
-        }else{
-                return false; 
-    }
-    }
+    //     public function checkProduct($id){
+    //     if(
+    //           Product::with("brand")->where(function($query) { 
+    //             $query->has('wishedProduct');
+    //         })->find($id)){
+    //         return true; 
+    //     }else{
+    //             return false; 
+    // }
+    // }
     public function showRealted($id){
         $product=Product::with("brand")->find($id);
         $cat_id = $product->category_id;
