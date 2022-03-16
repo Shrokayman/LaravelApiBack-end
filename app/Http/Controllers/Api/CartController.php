@@ -80,19 +80,25 @@ class CartController extends Controller
         $cart = Cart::with('products')->where('user_id', $request->user()->id)->find($id);
 
 
-        $cart = [];
+        // return Cart::find($id)->products()->updateExistingPivot('cart_id',['cart_id', 'product_id']);
+        // $cart = [];
 
-        // return dd($request->products[1]['id']);
-        foreach($request->products as $product){
+        // return dd($request->products[2]['id']);
 
-            // Cart::find($id)->products()->updateExistingPivot([$cart_id,$product_id,$product_quantity]);
+        $cart->products()->detach();
 
+        foreach ($request->products as $product) {
+            $selectedProduct = Product::where('id', $product['id'])->first();
+            if ($selectedProduct) {
+                $count = $product['quantity'];
+
+                $cart->products()->attach($selectedProduct->id, ['product_quantity' => $count]);
+            }
         }
 
-        // $cart =  Cart::find($id)->products()->updateExistingPivot([$cart_id,$product_id,$product_quantity],['active'=> true]);
+        $cart->save();
 
-        return ($cart);
-
+        return Cart::where('id', $cart->id)->with('products')->first();
     }
 
     /**
