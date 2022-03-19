@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\StoreCartProductRequest;
-use App\Http\Requests\UpdateCartProductRequest;
-use App\Models\CartProduct;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class CartProductController extends Controller
 {
@@ -19,22 +18,12 @@ class CartProductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreCartProductRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCartProductRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -42,21 +31,10 @@ class CartProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\CartProduct  $cartProduct
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(CartProduct $cartProduct)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\CartProduct  $cartProduct
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CartProduct $cartProduct)
+    public function show($id)
     {
         //
     }
@@ -64,11 +42,11 @@ class CartProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateCartProductRequest  $request
-     * @param  \App\Models\CartProduct  $cartProduct
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCartProductRequest $request, CartProduct $cartProduct)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -76,10 +54,10 @@ class CartProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\CartProduct  $cartProduct
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CartProduct $cartProduct)
+    public function destroy($id)
     {
         //
     }

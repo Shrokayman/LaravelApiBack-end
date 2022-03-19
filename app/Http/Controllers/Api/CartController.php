@@ -1,10 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\StoreCartRequest;
-use App\Http\Requests\UpdateCartRequest;
 use App\Models\Cart;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\CartProduct;
+use App\Models\User;
+
+use function PHPUnit\Framework\at;
 
 class CartController extends Controller
 {
@@ -15,72 +20,95 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $carts = Cart::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json($carts, 200);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreCartRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCartRequest $request)
+    public function store(Request $request)
     {
-        //
+
+        $cart = Cart::create([
+            'user_id' => $request->user()->id
+        ]);
+        $cart->save();
+
+        foreach ($request->products as $product) {
+            $selectedProduct = Product::where('id', $product['id'])->first();
+            if ($selectedProduct) {
+                $count = $product['quantity'];
+
+                $cart->products()->attach($selectedProduct->id, ['product_quantity' => $count]);
+            }
+        }
+
+        $cart->save();
+
+        return Cart::where('id', $cart->id)->with('products')->first();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Cart  $cart
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Cart $cart)
+    public function show(Request $request, $id)
     {
-        //
-    }
+        $cart = Cart::with('user', 'products')->where('user_id', $id)->get();
+        // $product = Cart::with('products')->where('user_id', $request->user()->id)->get();
+        // $cart = Cart::with('products')->where('user_id', $request->user()->id)->find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Cart $cart)
-    {
-        //
+        return response()->json($cart, 200);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateCartRequest  $request
-     * @param  \App\Models\Cart  $cart
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCartRequest $request, Cart $cart)
+    public function update(Request $request, $id)
     {
-        //
+        $cart = Cart::with('products')->where('user_id', $request->user()->id)->find($id);
+
+
+        // return Cart::find($id)->products()->updateExistingPivot('cart_id',['cart_id', 'product_id']);
+        // $cart = [];
+
+        // return dd($request->products[2]['id']);
+
+        $cart->products()->detach();
+
+        foreach ($request->products as $product) {
+            $selectedProduct = Product::where('id', $product['id'])->first();
+            if ($selectedProduct) {
+                $count = $product['quantity'];
+
+                $cart->products()->attach($selectedProduct->id, ['product_quantity' => $count]);
+            }
+        }
+
+        $cart->save();
+
+        return Cart::where('id', $cart->id)->with('products')->first();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Cart  $cart
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cart $cart)
+    public function destroy($id)
     {
-        //
+        return Cart::destroy($id);
     }
 }

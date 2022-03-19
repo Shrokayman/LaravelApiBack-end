@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Category;
 
-class CategoryController extends Controller
+class ReviewController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories=Category::all();
-        return $categories;
-
-
+        //
     }
 
     /**
@@ -29,10 +25,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $brand= new Category;
-        $brand->name=$request->name;
-        $brand->save();
-        return "category saved";
+        //
     }
 
     /**
@@ -41,20 +34,9 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getProducts($id)
+    public function show($id)
     {
-
-        $brand = Category::find($id);
-        $category = Category::find($id);
-        if(is_null($category)){
-            return response()->json(['message' => "Brand does not exist"] , 404);
-        }
-        return response()->json($category->products());
-
-        if(is_null($category)){
-            return response()->json(['message' => "Category does not exist"] , 404);
-        }
-        return $category->products;
+        //
     }
 
     /**
@@ -77,6 +59,6 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        return Category::destroy($id);
+        //
     }
 }

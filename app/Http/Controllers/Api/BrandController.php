@@ -17,6 +17,8 @@ class BrandController extends Controller
     {
         $brands=Brand::all();
         return $brands;
+
+
     }
 
     /**
@@ -27,6 +29,7 @@ class BrandController extends Controller
     public function create()
     {
         //
+
     }
 
     /**
@@ -48,9 +51,16 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function getProducts($id)
     {
-        //
+        $brand = Brand::find($id);
+        if(is_null($brand)){
+            return response()->json(['message' => "Brand does not exist"] , 404);
+        }
+
+        return response()->json($brand->products());
+
+        return $brand->products;
     }
 
     /**
@@ -62,6 +72,7 @@ class BrandController extends Controller
     public function edit($id)
     {
         //
+
     }
 
     /**
