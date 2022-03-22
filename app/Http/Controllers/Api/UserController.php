@@ -63,6 +63,7 @@ class UserController extends Controller
             'user_id' => $user->id,
             'user_name' => $user->fname,
             'email' => $user->email,
+            'city' => $user->city,
             'user_role' => $user->role
         ])->attempt($credentials);
 
