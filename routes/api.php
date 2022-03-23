@@ -117,18 +117,3 @@ Route::get('/carts/{id}', [CartController::class, 'show']);
 Route::post('/carts', [CartController::class, 'store']);
 Route::put('/carts/{id}', [CartController::class, 'update']);
 Route::delete('/carts/{id}', [CartController::class, 'destroy']);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
