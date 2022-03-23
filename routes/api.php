@@ -103,3 +103,23 @@ Route::get('/products/rate/{id}', [ReviewsController::class,'showRates']);
 
 // check if product in wishlist
 Route::get('/products/wishlist/{id}', [ProductController::class,'checkProduct']);
+
+///////////////////// Orders //////////////////////////////////////////
+
+Route::get('/orders', [OrderController::class, 'index']);
+Route::get('/order/{id}', [OrderController::class, 'show']);
+Route::put('/orders/{id}', [OrderController::class, 'update']);
+Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
+Route::post('/orders', [OrderController::class, 'store']);
+
+
+////////////////////////////////////////////////////////////////////////
+
+///////////////////////// Cart ////////////////////////////////////
+
+Route::get('/carts', [CartController::class, 'index']);
+Route::get('/carts/{id}', [CartController::class, 'show']);
+Route::post('/carts', [CartController::class, 'store']);
+Route::put('/carts/{id}', [CartController::class, 'update']);
+Route::delete('/carts/{id}', [CartController::class, 'destroy']);
+

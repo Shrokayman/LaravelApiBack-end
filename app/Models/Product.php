@@ -23,8 +23,8 @@ class Product extends Model
             return $this->wishedProduct()->whereUserId(auth()->id())->exists();
             }else{
             return false;
-            }    
-        } 
+            }
+        }
 
     public function reviews(){
         return $this->hasMany(Review::class);
@@ -40,5 +40,18 @@ class Product extends Model
     public function wishedProduct()
     {
     return $this->belongsToMany(User::class,UserProduct::class);
+    }
+
+
+    public function orders(){
+        return $this->belongsToMany(Order::class, 'order_products');
+    }
+
+    public function users(){
+        return $this->belongsToMany(User::class);
+    }
+
+    public function carts(){
+        return $this->belongsToMany(Cart::class);
     }
     }
