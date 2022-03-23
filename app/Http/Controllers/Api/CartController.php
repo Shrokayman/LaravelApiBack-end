@@ -39,10 +39,10 @@ class CartController extends Controller
         ]);
         $cart->save();
 
-        foreach ($request->products as $product) {
+        foreach ($request->cartItem as $product) {
             $selectedProduct = Product::where('id', $product['id'])->first();
             if ($selectedProduct) {
-                $count = $product['quantity'];
+                $count = $product['product_quantity'];
 
                 $cart->products()->attach($selectedProduct->id, ['product_quantity' => $count]);
             }
@@ -61,7 +61,7 @@ class CartController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $cart = Cart::with('user', 'products')->where('user_id', $id)->get();
+        $cart = Cart::with('products')->where('user_id', $id)->first();
         // $product = Cart::with('products')->where('user_id', $request->user()->id)->get();
         // $cart = Cart::with('products')->where('user_id', $request->user()->id)->find($id);
 
@@ -77,20 +77,14 @@ class CartController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $cart = Cart::with('products')->where('user_id', $request->user()->id)->find($id);
-
-
-        // return Cart::find($id)->products()->updateExistingPivot('cart_id',['cart_id', 'product_id']);
-        // $cart = [];
-
-        // return dd($request->products[2]['id']);
+        $cart = Cart::with('products','user')->where('user_id', $request->id)->first();
 
         $cart->products()->detach();
 
-        foreach ($request->products as $product) {
+        foreach ($request->cartItem as $product) {
             $selectedProduct = Product::where('id', $product['id'])->first();
             if ($selectedProduct) {
-                $count = $product['quantity'];
+                $count = $product['product_quantity'];
 
                 $cart->products()->attach($selectedProduct->id, ['product_quantity' => $count]);
             }
@@ -99,6 +93,7 @@ class CartController extends Controller
         $cart->save();
 
         return Cart::where('id', $cart->id)->with('products')->first();
+        // return $cart;
     }
 
     /**
@@ -109,6 +104,6 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-        return Cart::destroy($id);
+        return Cart::where('user_id', $id)->delete();
     }
 }

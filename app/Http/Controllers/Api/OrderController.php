@@ -46,38 +46,38 @@ class OrderController extends Controller
     {
         $total_cost = 0;
 
-        if ($request->user()->role == 'admin') {
-            if (!$request->user_id) {
-                return response()->json('Please Provide User', 404);
-            }
-            $order = Order::create([
-                'user_id' => $request->user_id,
-                'shipping_address' => $request->shipping_address,
-            ]);
-            $order->save();
+        // if ($request->user()->role == 'admin') {
+        //     if (!$request->user_id) {
+        //         return response()->json('Please Provide User', 404);
+        //     }
+        //     $order = Order::create([
+        //         'user_id' => $request->user_id,
+        //         'shipping_address' => $request->shipping_address,
+        //     ]);
+        //     $order->save();
 
-            foreach ($request->products as $product) {
-                $selectedProduct = Product::where('id', $product['id'])->first();
-                if ($selectedProduct) {
-                    $count = $product['quantity'];
-                    $total_cost += $selectedProduct->price * $count;
+        //     foreach ($request->products as $product) {
+        //         $selectedProduct = Product::where('id', $product['id'])->first();
+        //         if ($selectedProduct) {
+        //             $count = $product['quantity'];
+        //             $total_cost += $selectedProduct->price * $count;
 
-                    $order->products()->attach($selectedProduct->id, ['product_quantity' => $count]);
-                }
-            }
-            $order->update([
-                'total_cost' => $total_cost
-            ]);
+        //             $order->products()->attach($selectedProduct->id, ['product_quantity' => $count]);
+        //         }
+        //     }
+        //     $order->update([
+        //         'total_cost' => $total_cost
+        //     ]);
 
-            $order->save();
+        //     $order->save();
 
 
-            return Order::where('id', $order->id)->with('products')->first();
-        }
+        //     return Order::where('id', $order->id)->with('products')->first();
+        // }
 
         $order = Order::create([
-            'user_id' => auth()->user()->id,
-            'shipping_address' => $request->shipping_address,
+            'user_id' => $request->user()->id,
+            'shipping_address' => $request->user()->city,
         ]);
 
         $order->save();
@@ -85,7 +85,7 @@ class OrderController extends Controller
         foreach ($request->products as $product) {
             $selectedProduct = Product::where('id', $product['id'])->first();
             if ($selectedProduct) {
-                $count = $product['quantity'];
+                $count = $product['pivot']['product_quantity'];
                 $total_cost += $selectedProduct->price * $count;
 
                 $order->products()->attach($selectedProduct->id, ['product_quantity' => $count]);
@@ -112,10 +112,10 @@ class OrderController extends Controller
         $order = Order::find($id);
         $user = Order::find($id)->user;
         $product = Order::find($id)->products;
-        $productBrand = Brand::where('id', $product[0]->brand_id)->get();
-        $productCategory = Category::where('id', $product[0]->brand_id)->get();
+        $productBrand = Brand::where('id', $product[0]->brand_id)->first();
+        $productCategory = Category::where('id', $product[0]->brand_id)->first();
 
-        return response()->json(array(['order' => $order,'user' => $user, 'product' => $product, 'brand' => $productBrand, 'category' => $productCategory]),200);
+        return response()->json(array(['order' => $order,'user' => $user, 'products' => $product, 'brand' => $productBrand, 'category' => $productCategory]),200);
     }
 
     /**
