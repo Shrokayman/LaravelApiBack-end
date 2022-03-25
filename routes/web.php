@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderMail;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +18,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+// Email Confirmation
+
+Route::get('/email', function(){
+
+    Mail::to('user_email@bruh.com')->send(new OrderMail());
+    return new OrderMail();
 });
