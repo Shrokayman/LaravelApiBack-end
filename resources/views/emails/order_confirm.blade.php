@@ -3,7 +3,7 @@
 
 Your order has been placed successfully
 
-@component('mail::button', ['url' => 'www.zee.com'])
+@component('mail::button', ['url' => 'localhost:4200'])
 Shop More
 @endcomponent
 

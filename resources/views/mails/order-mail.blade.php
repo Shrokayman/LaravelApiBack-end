@@ -7,8 +7,25 @@
     <title>Order Confirmation</title>
 </head>
 <body>
-    <p>Hi {{$order->user_id}}</p>
-    <p>Your order has been successfully placeed</p>
+    <p>Hi {{$order->user()->fname}}</p>
+    <p>Your order has been placed successfully </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     {{-- <table style="width: 600px; text-align:right" >
     <thead>
         <tr>
