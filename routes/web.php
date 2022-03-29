@@ -28,5 +28,5 @@ Route::get('/email', function(){
     $order = Order::with('user')->first();
     $email = User::first();
     Mail::to($email)->send(new OrderMail($order));
-    return new OrderMail();
+    return new OrderMail($order);
 });

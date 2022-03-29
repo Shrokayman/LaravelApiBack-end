@@ -1,5 +1,5 @@
 @component('mail::message')
-# Hello {{$order ?? 'user_name'}},
+# Hello {{$order->user->fname}},
 
 Your order has been placed successfully
 

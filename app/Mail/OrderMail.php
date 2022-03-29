@@ -28,7 +28,6 @@ class OrderMail extends Mailable
     // }
     public function __construct($order)
 {
-    // $this->user=$user;
     $this->order = $order;
 
 }
