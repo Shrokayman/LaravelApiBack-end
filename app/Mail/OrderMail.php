@@ -39,6 +39,7 @@ class OrderMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.order_confirm');
+        return $this->markdown('emails.order_confirm')->text('emails.order_confirm');
+        ;
     }
 }
