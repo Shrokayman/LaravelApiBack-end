@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Review;
 use App\Models\User;
 use Tymon\JWTAuth\Exceptions\UserNotDefinedException;
 
@@ -56,7 +57,7 @@ class ProductController extends Controller
         $product->discount=$request->discount;
         $product->category_id=$request->category_id;
         $product->brand_id=$request->brand_id;
-        $product->average_rate= 0;
+        $product->average_rate= Review::avg('rate');
         $product->save();
         if($product->save()){
             return response()->json($product, 201);
@@ -74,14 +75,17 @@ class ProductController extends Controller
      public function show($id)
     {
         if(
-        $wishproduct= Product::with("brand")->where(function($query) { 
-            $query->has('WishedProduct');
-        })->find($id)){
+        $wishproduct= Product::with("brand") 
+        ->find($id)){
+            $wishproduct["isBought"]=$wishproduct->isBought();
             $wishproduct["isWished"]=$wishproduct->isWished();
+            $wishproduct["isRated"]=$wishproduct->isRated();
         return response()->json($wishproduct); 
     }else{
             $product=Product::with("brand")->find($id);
             $product["isWished"]=$product->isWished();
+            $product["isBought"]=$product->isBought();
+            $product["isRated"]=$product->isRated();
             return response()->json($product); 
         // return "Not in Wishlist";
     };

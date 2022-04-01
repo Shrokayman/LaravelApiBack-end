@@ -13,4 +13,8 @@ class OrderProduct extends Model
         'user_id',
         'product_id',
     ];
+
+    protected $table = 'order_product';
+
+
 }

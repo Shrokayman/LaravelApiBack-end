@@ -51,7 +51,7 @@ class UserProductController extends Controller
             $userProduct->product_id=$request->product_id;
             $userProduct->user_id=$request->user_id;
             $userProduct->save();
-            return "userproduct saved";
+            return "user product saved";
 }
 
     }

@@ -15,6 +15,7 @@ class Product extends Model
     protected $fillable = [
         'name','image','description','price','discount','average_rate','category_id','brand_id',
     ];
+    
     // protected $append = ['is_wished'];
 
     public function isWished()
@@ -24,7 +25,23 @@ class Product extends Model
             }else{
             return false;
             }    
-        } 
+    } 
+    public function isBought()
+    {
+        if(auth()->check()){
+            return $this->orderedProduct()->whereUserId(auth()->id())->exists();
+            }else{
+            return false;
+            }    
+    } 
+    public function isRated()
+    {
+        if(auth()->check()){
+            return $this->ratedProduct()->whereUserId(auth()->id())->exists();
+            }else{
+            return false;
+            }    
+    } 
 
     public function reviews(){
         return $this->hasMany(Review::class);
@@ -40,5 +57,13 @@ class Product extends Model
     public function wishedProduct()
     {
     return $this->belongsToMany(User::class,UserProduct::class);
+    }
+    public function orderedProduct()
+    {
+    return $this->belongsToMany(Order::class,OrderProduct::class);
+    }
+    public function ratedProduct()
+    {
+    return $this->belongsToMany(User::class,Review::class);
     }
     }

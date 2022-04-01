@@ -6,6 +6,7 @@ use App\Http\Requests\StoreReviewsRequest;
 use App\Http\Requests\UpdateReviewsRequest;
 use App\Models\Review;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class ReviewsController extends Controller
 {
@@ -39,9 +40,31 @@ class ReviewsController extends Controller
      * @param  \App\Http\Requests\StoreReviewsRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store()
+    public function store(Request $request)
     {
-        //
+        $review = Review::where('product_id', '=', $request->product_id)->where('user_id', '=', $request->user_id)->first();
+        if ($review === null) {
+             // Rate doesn't exist
+            $review= new Review();
+            $review->product_id=$request->product_id;
+            $review->user_id=$request->user_id;
+            $review->rate=$request->rate;
+            // $request->product_id->average_rate =Review::avg('rate'); 
+            $review->save();
+        return "Rate saved";
+    }else{
+        return "rate didnt save";
+    }
+//         $review= new Review();
+//         $review->product_id=$request->product_id;
+//         $review->user_id=$request->user_id;
+//         $review->rate=$request->rate;
+//         $review->save();
+//         if ($review) {
+//         return "Rate saved";
+//     }else{
+//     return "rate didnt save";
+//  }
     }
 
     /**

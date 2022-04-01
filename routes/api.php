@@ -103,3 +103,6 @@ Route::get('/products/rate/{id}', [ReviewsController::class,'showRates']);
 
 // check if product in wishlist
 Route::get('/products/wishlist/{id}', [ProductController::class,'checkProduct']);
+
+//Add Rate For Product which is put 
+Route::post('/products/rate', [ReviewsController::class,'store']);
