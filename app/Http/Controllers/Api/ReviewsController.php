@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateReviewsRequest;
 use App\Models\Review;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Product;
 
 class ReviewsController extends Controller
 {
@@ -49,22 +50,11 @@ class ReviewsController extends Controller
             $review->product_id=$request->product_id;
             $review->user_id=$request->user_id;
             $review->rate=$request->rate;
-            // $request->product_id->average_rate =Review::avg('rate'); 
             $review->save();
         return "Rate saved";
     }else{
         return "rate didnt save";
     }
-//         $review= new Review();
-//         $review->product_id=$request->product_id;
-//         $review->user_id=$request->user_id;
-//         $review->rate=$request->rate;
-//         $review->save();
-//         if ($review) {
-//         return "Rate saved";
-//     }else{
-//     return "rate didnt save";
-//  }
     }
 
     /**
@@ -81,13 +71,27 @@ class ReviewsController extends Controller
     public function showRates($id)
     {
         if($avgRates = Review::where('product_id','=',$id)->avg('rate')){
-
+            $product = Product::findOrFail($id);
+            $product->average_rate = $avgRates;
+            $product->save();
+            // dd($product);
             return $avgRates;
         }else{
             return "Product Have Not Rated yet !!";
         }
     }
 
+
+    // public function storeAvgRate($id)
+    // {
+    //     $product = new Product;
+
+    //     $product->average_rate = Review::where('product_id','=',$id)->avg('rate');
+    //     $product->save();
+
+    //     return $product->average_rate;
+
+    // }
     /**
      * Show the form for editing the specified resource.
      *

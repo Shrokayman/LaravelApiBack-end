@@ -101,6 +101,9 @@ Route::get('/reviews', [ReviewsController::class,'index']);
 // Get Avg  Rate For Each product
 Route::get('/products/rate/{id}', [ReviewsController::class,'showRates']);
 
+// Route::post('/products/rates/{id}', [ProductController::class,'storeAvgRate']);
+
+
 // check if product in wishlist
 Route::get('/products/wishlist/{id}', [ProductController::class,'checkProduct']);
 

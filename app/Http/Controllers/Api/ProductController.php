@@ -25,8 +25,10 @@ class ProductController extends Controller
     {
         $products = Product::with("brand","category")->get();
         $result = [];
+        // dd($products);
         foreach($products as $product){
             $product["isWished"]=$product->isWished();
+            
         }
 
         return response()->json($products);
@@ -57,7 +59,8 @@ class ProductController extends Controller
         $product->discount=$request->discount;
         $product->category_id=$request->category_id;
         $product->brand_id=$request->brand_id;
-        $product->average_rate= Review::avg('rate');
+        // $product->average_rate= 0;
+        
         $product->save();
         if($product->save()){
             return response()->json($product, 201);
@@ -65,7 +68,7 @@ class ProductController extends Controller
             return ['status' => false, 'message' => 'Couldnt Save Image'];
         }
 
-    }
+     }
 
     /**
      * Display the specified resource.
