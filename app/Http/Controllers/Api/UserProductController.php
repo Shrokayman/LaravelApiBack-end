@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\UserProduct;
+use App\Models\User;
+use App\Models\Product;
+
 
 class UserProductController extends Controller
 {
@@ -14,7 +18,11 @@ class UserProductController extends Controller
      */
     public function index()
     {
-        //
+
+
+        // $user=User::with("products")->find(1);
+
+        // return $user;
     }
 
     /**
@@ -25,7 +33,17 @@ class UserProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $user = UserProduct::where('product_id', '=', $request->product_id)->where('user_id', '=', $request->user_id)->first();
+        if ($user === null) {
+             // user doesn't exist
+            $userProduct= new UserProduct;
+            $userProduct->product_id=$request->product_id;
+            $userProduct->user_id=$request->user_id;
+            $userProduct->save();
+            return "userproduct saved";
+}
+
     }
 
     /**
@@ -35,6 +53,19 @@ class UserProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
+    {
+        $user=User::with("products")->find($id);
+
+        return $user;
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
         //
     }
@@ -57,8 +88,9 @@ class UserProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id,$user_id)
     {
-        //
+        return UserProduct::where('product_id',$id)->where('user_id',$user_id)->delete();
+
     }
 }

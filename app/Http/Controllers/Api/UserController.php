@@ -75,18 +75,18 @@ class UserController extends Controller
     }
 
     public function index(){
-        try{
-            $user = auth()->userOrFail();
-        }catch(UserNotDefinedException $e){
-            return response()->json(['error' => $e->getMessage()]);
-        }
+        // try{
+        //     $user = auth()->userOrFail();
+        // }catch(UserNotDefinedException $e){
+        //     return response()->json(['error' => $e->getMessage()]);
+        // }
             //Select* From Users
-        if($user->role =="admin"){
+        // if($user->role =="admin"){
         $user= User::all();
         return $user;
-            }else{
-                return "You Are Not Admin";
-            }
+        //     }else{
+        //         return "You Are Not Admin";
+        //     }
     }
 
     public function update(Request $request,$id){
@@ -122,20 +122,20 @@ class UserController extends Controller
 
 
     public function show($id){
-        try{
-            $user = auth()->userOrFail();
-        }catch(UserNotDefinedException $e){
-            return response()->json(['error' => $e->getMessage()]);
-        }
-        if($user->role == "admin"){
+        // try{
+        //     $user = auth()->userOrFail();
+        // }catch(UserNotDefinedException $e){
+        //     return response()->json(['error' => $e->getMessage()]);
+        // }
+        // if($user->role == "admin"){
             $user = User::find($id);
-            if(is_null($user)){
-                return response()->json(['message' => "User does not exist"] , 404);
-            }
-        }
-        else{
+        //     if(is_null($user)){
+        //         return response()->json(['message' => "User does not exist"] , 404);
+        //     }
+        // }
+        // else{
             $user = User::find($user->id);
-        }
+        // }
 
         return response()->json($user);
     }

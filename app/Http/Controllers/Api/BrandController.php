@@ -69,10 +69,12 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function show($id)
     {
         //
+        $brand=Brand::find($id);
 
+        return response()->json($brand);
     }
 
     /**

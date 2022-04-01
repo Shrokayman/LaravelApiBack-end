@@ -19,6 +19,16 @@ class Product extends Model
         'category_id',
         'brand_id',
     ];
+    // protected $append = ['is_wished'];
+
+    public function isWished()
+    {
+        if(auth()->check()){
+            return $this->wishedProduct()->whereUserId(auth()->id())->exists();
+            }else{
+            return false;
+            }
+        }
 
     public function reviews(){
         return $this->hasMany(Review::class);
@@ -31,6 +41,11 @@ class Product extends Model
     public function brand(){
         return $this->belongsTo(Brand::class);
     }
+    public function wishedProduct()
+    {
+    return $this->belongsToMany(User::class,UserProduct::class);
+    }
+
 
     public function orders(){
         return $this->belongsToMany(Order::class, 'order_products');

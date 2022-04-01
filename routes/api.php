@@ -8,10 +8,12 @@ use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
-use App\Models\Brand;
-use App\Models\Cart;
-use App\Models\Product;
+// use App\Models\Brand;
+// use App\Models\Cart;
+// use App\Models\Product;
 
+use App\Http\Controllers\Api\UserProductController;
+use App\Http\Controllers\Api\ReviewsController;
 
 
 /*
@@ -95,17 +97,51 @@ Route::get('/products', [ProductController::class, 'index']);
 Route::post('/products', [ProductController::class, 'store']);
 
 // Show Single Product
-Route::get('/product/{id}', [ProductController::class, 'show']);
+Route::get('/products/{id}',[ProductController::class,'show']);
 
 // Update
-Route::put('/products/{id}', [ProductController::class, 'update']);
+Route::put('products/{id}',[ProductController::class,'update']);
 
 // Delete
 Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 
 // Search -- Tested In Postman
-Route::get('/products/search/{name}', [ProductController::class, 'search']);
+Route::get('/products/search/{name}',[ProductController::class,'search']);
 
+
+// Top products
+Route::get('/topproducts',[ProductController::class,'rating']);
+
+
+////////////////////// WishList///////////////////////
+Route::post('/userproducts', [UserProductController::class,'store']);
+Route::delete('/userproducts/{id}/{user_id}',[UserProductController::class,'destroy']);
+Route::get('/userproducts/{id}', [UserProductController::class,'show']);
+
+
+// Show Related Products
+
+Route::get('/products/show/{id}',[ProductController::class,'showRealted']);
+
+// Get Product Reviews
+Route::get('/reviews', [ReviewsController::class,'index']);
+
+// Get Avg  Rate For Each product
+Route::get('/products/rate/{id}', [ReviewsController::class,'showRates']);
+
+// check if product in wishlist
+Route::get('/products/wishlist/{id}', [ProductController::class,'checkProduct']);
+
+///////////////////// Orders //////////////////////////////////////////
+
+Route::get('/orders', [OrderController::class, 'index']);
+Route::get('/order/{id}', [OrderController::class, 'show']);
+Route::put('/orders/{id}', [OrderController::class, 'update']);
+Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
+Route::post('/orders', [OrderController::class, 'store']);
+
+
+////////////////////////////////////////////////////////////////////////
 
 ///////////////////////// Cart ////////////////////////////////////
 
@@ -114,18 +150,4 @@ Route::get('/carts/{id}', [CartController::class, 'show']);
 Route::post('/carts', [CartController::class, 'store']);
 Route::put('/carts/{id}', [CartController::class, 'update']);
 Route::delete('/carts/{id}', [CartController::class, 'destroy']);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
