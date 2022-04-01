@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
+use App\Models\Brand;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Controllers\Controller;
-use App\Models\Brand;
-use App\Models\Category;
-use App\Models\Product;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use App\Models\User;
+use App\Http\Controllers\Controller;
+
 
 class OrderController extends Controller
 {
@@ -94,6 +95,9 @@ class OrderController extends Controller
         $order->update([
             'total_cost' => $total_cost
         ]);
+
+        $email = User::where('id', $request->user()->id)->get('email')->first();
+        // $email = Table::select('name','surname')->where('id', 1)->get();
 
         $order->save();
 
