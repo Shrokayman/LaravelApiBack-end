@@ -79,6 +79,7 @@ class OrderController extends Controller
         $order = Order::create([
             'user_id' => $request->user()->id,
             'shipping_address' => $request->user()->city,
+            'status' => 'pending',
         ]);
 
         $order->save();
