@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Brand;
 
-class BrandController extends Controller
+class ReviewController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,21 +14,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands=Brand::all();
-        return $brands;
-
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
         //
-
     }
 
     /**
@@ -40,9 +25,7 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-            $brand= new Brand;
-            $brand->name=$request->name;
-            $brand->save();
+        //
     }
 
     /**
@@ -51,30 +34,9 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getProducts($id)
-    {
-        $brand = Brand::find($id);
-        if(is_null($brand)){
-            return response()->json(['message' => "Brand does not exist"] , 404);
-        }
-
-        return response()->json($brand->products());
-
-        return $brand->products;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
-        $brand=Brand::find($id);
-
-        return response()->json($brand);
     }
 
     /**
@@ -97,6 +59,6 @@ class BrandController extends Controller
      */
     public function destroy($id)
     {
-        return Brand::destroy($id);
+        //
     }
 }

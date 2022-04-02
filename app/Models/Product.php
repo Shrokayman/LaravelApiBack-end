@@ -4,16 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Order;
-use App\Models\Review;
-use App\Models\Category;
-use App\Models\Brand;
 
 class Product extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'name','image','description','price','discount','average_rate','category_id','brand_id',
+        'name',
+        'image',
+        'description',
+        'price',
+        'discount',
+        'average_rate',
+        'category_id',
+        'brand_id',
     ];
     
     // protected $append = ['is_wished'];
@@ -24,6 +28,7 @@ class Product extends Model
             return $this->wishedProduct()->whereUserId(auth()->id())->exists();
             }else{
             return false;
+<<<<<<< HEAD
             }    
     } 
     public function isBought()
@@ -42,6 +47,10 @@ class Product extends Model
             return false;
             }    
     } 
+=======
+            }
+        }
+>>>>>>> backup
 
     public function reviews(){
         return $this->hasMany(Review::class);
@@ -58,6 +67,7 @@ class Product extends Model
     {
     return $this->belongsToMany(User::class,UserProduct::class);
     }
+<<<<<<< HEAD
     public function orderedProduct()
     {
     return $this->belongsToMany(Order::class,OrderProduct::class);
@@ -66,4 +76,19 @@ class Product extends Model
     {
     return $this->belongsToMany(User::class,Review::class);
     }
+=======
+
+
+    public function orders(){
+        return $this->belongsToMany(Order::class, 'order_products');
     }
+
+    public function users(){
+        return $this->belongsToMany(User::class);
+    }
+
+    public function carts(){
+        return $this->belongsToMany(Cart::class);
+>>>>>>> backup
+    }
+}

@@ -18,21 +18,11 @@ class UserProductController extends Controller
      */
     public function index()
     {
-        
+
 
         // $user=User::with("products")->find(1);
 
         // return $user;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -101,6 +91,6 @@ class UserProductController extends Controller
     public function destroy($id,$user_id)
     {
         return UserProduct::where('product_id',$id)->where('user_id',$user_id)->delete();
-        
+
     }
 }
