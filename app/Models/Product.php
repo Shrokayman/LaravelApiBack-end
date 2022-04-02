@@ -19,7 +19,7 @@ class Product extends Model
         'category_id',
         'brand_id',
     ];
-    
+
     // protected $append = ['is_wished'];
 
     public function isWished()
@@ -28,29 +28,24 @@ class Product extends Model
             return $this->wishedProduct()->whereUserId(auth()->id())->exists();
             }else{
             return false;
-<<<<<<< HEAD
-            }    
-    } 
+            }
+    }
     public function isBought()
     {
         if(auth()->check()){
             return $this->orderedProduct()->whereUserId(auth()->id())->exists();
             }else{
             return false;
-            }    
-    } 
+            }
+    }
     public function isRated()
     {
         if(auth()->check()){
             return $this->ratedProduct()->whereUserId(auth()->id())->exists();
             }else{
             return false;
-            }    
-    } 
-=======
             }
-        }
->>>>>>> backup
+    }
 
     public function reviews(){
         return $this->hasMany(Review::class);
@@ -67,7 +62,6 @@ class Product extends Model
     {
     return $this->belongsToMany(User::class,UserProduct::class);
     }
-<<<<<<< HEAD
     public function orderedProduct()
     {
     return $this->belongsToMany(Order::class,OrderProduct::class);
@@ -76,7 +70,6 @@ class Product extends Model
     {
     return $this->belongsToMany(User::class,Review::class);
     }
-=======
 
 
     public function orders(){
@@ -89,6 +82,5 @@ class Product extends Model
 
     public function carts(){
         return $this->belongsToMany(Cart::class);
->>>>>>> backup
     }
 }
