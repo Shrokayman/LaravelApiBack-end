@@ -1,6 +1,11 @@
 <?php
 
+use App\Models\User;
+use App\Models\Order;
+use App\Mail\OrderMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +20,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+// Email Confirmation
+
+Route::get('/email', function(){
+    $order = Order::with('user')->first();
+    $email = User::first();
+    Mail::to($email)->send(new OrderMail($order));
+    return new OrderMail($order);
 });

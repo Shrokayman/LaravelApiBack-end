@@ -8,9 +8,12 @@ use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
-// use App\Models\Brand;
-// use App\Models\Cart;
-// use App\Models\Product;
+use App\Models\Brand;
+use App\Models\Cart;
+use App\Models\Product;
+use App\Mail\OrderMail;
+use Illuminate\Support\Facades\Mail;
+
 
 use App\Http\Controllers\Api\UserProductController;
 use App\Http\Controllers\Api\ReviewsController;
@@ -34,6 +37,14 @@ Route::get('/order/{id}', [OrderController::class, 'show']);
 Route::put('/orders/{id}', [OrderController::class, 'update']);
 Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
 Route::post('/orders', [OrderController::class, 'store']);
+
+// // Email Confirmation
+
+// Route::get('/email', function(){
+
+//     Mail::to('user_name@bruh.com')->send(new OrderMail);
+//     return new OrderMail();
+// });
 
 
 // Route::resource('orders', OrderController::class);
@@ -145,8 +156,6 @@ Route::put('/orders/{id}', [OrderController::class, 'update']);
 Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
 Route::post('/orders', [OrderController::class, 'store']);
 
-
-////////////////////////////////////////////////////////////////////////
 
 ///////////////////////// Cart ////////////////////////////////////
 

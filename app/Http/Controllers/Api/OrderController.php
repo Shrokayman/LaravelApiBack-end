@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use App\Models\Brand;
 use App\Models\Order;
+use App\Mail\OrderMail;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -101,9 +102,12 @@ class OrderController extends Controller
         // $email = Table::select('name','surname')->where('id', 1)->get();
 
         $order->save();
+        // $email = $order->user()->email;
+        $email = User::where('id', $request->user()->id)->get('email')->first();
+        Mail::to($email)->send(new OrderMail($order));
+        // return new OrderMail($order);
 
-
-        return Order::where('id', $order->id)->with('products')->first();
+        return [Order::where('id', $order->id)->with('products')->first(), new OrderMail($order)];
     }
 
     /**
