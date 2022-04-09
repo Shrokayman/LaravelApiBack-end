@@ -36,14 +36,13 @@ class UserProductController extends Controller
 
         $user = UserProduct::where('product_id', '=', $request->product_id)->where('user_id', '=', $request->user_id)->first();
         if ($user === null) {
-             // user doesn't exist
-            $userProduct= new UserProduct;
-            $userProduct->product_id=$request->product_id;
-            $userProduct->user_id=$request->user_id;
+            // user doesn't exist
+            $userProduct = new UserProduct;
+            $userProduct->product_id = $request->product_id;
+            $userProduct->user_id = $request->user_id;
             $userProduct->save();
-            return "user product saved";
-}
-
+            return response()->json("user product saved");
+        }
     }
 
     /**
@@ -54,7 +53,7 @@ class UserProductController extends Controller
      */
     public function show($id)
     {
-        $user=User::with("products")->find($id);
+        $user = User::with("products")->find($id);
 
         return $user;
     }
@@ -88,9 +87,8 @@ class UserProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id,$user_id)
+    public function destroy($id, $user_id)
     {
-        return UserProduct::where('product_id',$id)->where('user_id',$user_id)->delete();
-
+        return UserProduct::where('product_id', $id)->where('user_id', $user_id)->delete();
     }
 }

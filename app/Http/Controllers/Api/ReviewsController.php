@@ -6,6 +6,7 @@ use App\Http\Requests\StoreReviewsRequest;
 use App\Http\Requests\UpdateReviewsRequest;
 use App\Models\Review;
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\Product;
 
@@ -51,9 +52,9 @@ class ReviewsController extends Controller
             $review->user_id=$request->user_id;
             $review->rate=$request->rate;
             $review->save();
-        return "Rate saved";
+        return response()->json("Rate saved");
     }else{
-        return "rate didnt save";
+        return response()->json("rate didnt save");
     }
     }
 
@@ -77,7 +78,7 @@ class ReviewsController extends Controller
             // dd($product);
             return $avgRates;
         }else{
-            return "Product Have Not Rated yet !!";
+            return response()->json("Product Have Not Rated yet !!");
         }
     }
 

@@ -28,6 +28,6 @@ class CartProductSeeder extends Seeder
 
         ];
 
-        DB::table('cart_products')->insert($productCart);
+        DB::table('cart_product')->insert($productCart);
     }
 }

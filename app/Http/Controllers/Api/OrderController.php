@@ -33,7 +33,7 @@ class OrderController extends Controller
             return response()->json($orders, 200);
         }
 
-        $userOrders = Order::with('user')->get()->where("user_id", $request->user()->id);
+        $userOrders = Order::with('user')->where("user_id", $request->user()->id)->get();
 
         return response()->json($userOrders, 200);
     }
@@ -89,7 +89,7 @@ class OrderController extends Controller
             $selectedProduct = Product::where('id', $product['id'])->first();
             if ($selectedProduct) {
                 $count = $product['pivot']['product_quantity'];
-                $total_cost += $selectedProduct->price * $count;
+                $total_cost += ($selectedProduct->price * $count) - ($selectedProduct->discount * $count);
 
                 $order->products()->attach($selectedProduct->id, ['product_quantity' => $count]);
             }

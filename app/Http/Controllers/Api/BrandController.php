@@ -58,8 +58,6 @@ class BrandController extends Controller
             return response()->json(['message' => "Brand does not exist"] , 404);
         }
 
-        return response()->json($brand->products());
-
         return $brand->products;
     }
 

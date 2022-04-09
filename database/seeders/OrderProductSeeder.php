@@ -47,6 +47,6 @@ class OrderProductSeeder extends Seeder
             ['order_id' => 24, 'product_id' => 10],
         ];
 
-        DB::table('order_products')->insert($orderPro);
+        DB::table('order_product')->insert($orderPro);
     }
 }

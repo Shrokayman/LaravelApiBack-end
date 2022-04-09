@@ -14,8 +14,9 @@ class ModifyProductsTable extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            
+
             $table->integer('average_rate')->nullable()->change();
+            $table->integer('discount')->nullable()->change();
 
         });
     }
